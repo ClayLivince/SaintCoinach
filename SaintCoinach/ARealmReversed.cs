@@ -160,7 +160,7 @@ namespace SaintCoinach {
         /// </summary>
         /// <param name="gamePath">Directory path to the game installation.</param>
         /// <param name="language">Initial language to use.</param>
-        public ARealmReversed(string gamePath, Language language) : this(new DirectoryInfo(gamePath), new FileInfo(DefaultStateFile), language, null) { }
+        public ARealmReversed(string gamePath, Language language) : this(new DirectoryInfo(gamePath), new FileInfo(DefaultStateFile), language, null, "") { }
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ARealmReversed" /> class.
@@ -168,7 +168,7 @@ namespace SaintCoinach {
         /// <param name="gamePath">Directory path to the game installation.</param>
         /// <param name="storePath">Path to the file used for storing definitions and history.</param>
         /// <param name="language">Initial language to use.</param>
-        public ARealmReversed(string gamePath, string storePath, Language language) : this(new DirectoryInfo(gamePath), new FileInfo(storePath), language, null) { }
+        public ARealmReversed(string gamePath, string storePath, Language language) : this(new DirectoryInfo(gamePath), new FileInfo(storePath), language, null, "") { }
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ARealmReversed" /> class.
@@ -177,7 +177,16 @@ namespace SaintCoinach {
         /// <param name="storePath">Path to the file used for storing definitions and history.</param>
         /// <param name="language">Initial language to use.</param>
         /// <param name="libraPath">Path to the Libra Eorzea database file.</param>
-        public ARealmReversed(string gamePath, string storePath, Language language, string libraPath) : this(new DirectoryInfo(gamePath), new FileInfo(storePath), language, new FileInfo(libraPath)) { }
+        public ARealmReversed(string gamePath, string storePath, Language language, string libraPath) : this(new DirectoryInfo(gamePath), new FileInfo(storePath), language, new FileInfo(libraPath), "") { }
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="ARealmReversed" /> class.
+        /// </summary>
+        /// <param name="gamePath">Directory path to the game installation.</param>
+        /// <param name="storePath">Path to the file used for storing definitions and history.</param>
+        /// <param name="language">Initial language to use.</param>
+        /// <param name="libraPath">Path to the Libra Eorzea database file.</param>
+        public ARealmReversed(string gamePath, string storePath, Language language, string libraPath, string version) : this(new DirectoryInfo(gamePath), new FileInfo(storePath), language, new FileInfo(libraPath), version) { }
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ARealmReversed" /> class.
@@ -186,7 +195,7 @@ namespace SaintCoinach {
         /// <param name="storeFile">File used for storing definitions and history.</param>
         /// <param name="language">Initial language to use.</param>
         /// <param name="libraFile">Location of the Libra Eorzea database file, or <c>null</c> if it should not be used.</param>
-        public ARealmReversed(DirectoryInfo gameDirectory, FileInfo storeFile, Language language, FileInfo libraFile) {
+        public ARealmReversed(DirectoryInfo gameDirectory, FileInfo storeFile, Language language, FileInfo libraFile, string version) {
 
             // Fix for being referenced in a .Net Core 2.1+ application (https://stackoverflow.com/questions/50449314/ibm437-is-not-a-supported-encoding-name => https://stackoverflow.com/questions/44659499/epplus-error-reading-file)
             // PM> dotnet add package System.Text.Encoding.CodePages
@@ -200,7 +209,11 @@ namespace SaintCoinach {
 
             _GameVersion = File.ReadAllText(Path.Combine(gameDirectory.FullName, "game", "ffxivgame.ver"));
             _StateFile = storeFile;
-            _GameData.Definition = ReadDefinition();
+
+            if (string.IsNullOrEmpty(version))
+                _GameData.Definition = ReadDefinition();
+            else
+                _GameData.Definition = ReadDefinition(version);
 
             using (var zipFile = new ZipFile(StateFile.FullName, ZipEncoding)) {
                 if (!zipFile.ContainsEntry(VersionFile))
@@ -215,13 +228,21 @@ namespace SaintCoinach {
         #region Shared
 
         private RelationDefinition ReadDefinition() {
-            var versionPath = Path.Combine("Definitions", "game.ver");
+            return ReadDefinition("");
+        }
+
+        private RelationDefinition ReadDefinition(string location) {
+            string baseDir = "Definitions";
+            if (!string.IsNullOrEmpty(location)) {
+                baseDir = baseDir + "-" + location;
+            }
+            string versionPath = Path.Combine(baseDir, "game.ver");
             if (!File.Exists(versionPath))
-                throw new InvalidOperationException("Definitions\\game.ver must exist.");
+                throw new InvalidOperationException($"{baseDir}\\game.ver must exist. If you are reading an custom definition, please make sure game.ver exist for it.");
 
             var version = File.ReadAllText(versionPath).Trim();
             var def = new RelationDefinition() { Version = version };
-            foreach (var sheetFileName in Directory.EnumerateFiles("Definitions", "*.json")) {
+            foreach (var sheetFileName in Directory.EnumerateFiles(baseDir, "*.json")) {
                 var json = File.ReadAllText(Path.Combine(sheetFileName), Encoding.UTF8);
                 var obj = JsonConvert.DeserializeObject<Newtonsoft.Json.Linq.JObject>(json);
                 var sheetDef = SheetDefinition.FromJson(obj);
