@@ -203,7 +203,21 @@ namespace SaintCoinach {
 
             _GameDirectory = gameDirectory;
             _Packs = new PackCollection(Path.Combine(gameDirectory.FullName, "game", "sqpack"));
-            _GameData = new XivCollection(Packs, libraFile) {
+            ClientType client = ClientType.GLOBAL;
+            switch (version) {
+                case "cn":
+                    client = ClientType.CHINA;
+                    break;
+                case "kr":
+                    client = ClientType.KOREA;
+                    break;
+                case "":
+                case null:
+                    break;
+                default:
+                    throw new NotSupportedException($"Unknown client type {version}!");
+            }
+            _GameData = new XivCollection(Packs, libraFile, client) {
                 ActiveLanguage = language
             };
 

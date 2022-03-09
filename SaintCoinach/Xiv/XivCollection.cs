@@ -60,6 +60,8 @@ namespace SaintCoinach.Xiv {
         /// </summary>
         private Libra.Entities _Libra;
 
+        private ClientType _ClientType;
+
         #endregion
 
         #region Properties
@@ -127,6 +129,8 @@ namespace SaintCoinach.Xiv {
         /// <value>The connection to the Libra Eorzea database.</value>
         public Libra.Entities Libra { get { return _Libra; } }
 
+        public ClientType ClientType { get { return _ClientType; } }
+
         #endregion
 
         #region Constructors
@@ -135,16 +139,16 @@ namespace SaintCoinach.Xiv {
         ///     Initializes a new instance of the <see cref="XivCollection" /> class.
         /// </summary>
         /// <param name="packCollection">The <see cref="PackCollection" /> to use to access game data.</param>
-        public XivCollection(PackCollection packCollection) : this(packCollection, null) { }
+        public XivCollection(PackCollection packCollection) : this(packCollection, null, ClientType.GLOBAL) { }
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="XivCollection" /> class.
         /// </summary>
         /// <param name="packCollection">The <see cref="PackCollection" /> to use to access game data.</param>
         /// <param name="libraDatabase"><see cref="FileInfo"/> of the Libra Eorzea database file, or <c>null</c> if Libra data should be disabled.</param>
-        public XivCollection(PackCollection packCollection, System.IO.FileInfo libraDatabase)
+        public XivCollection(PackCollection packCollection, System.IO.FileInfo libraDatabase, ClientType clientType)
             : base(packCollection) {
-
+            _ClientType = clientType;
             if (libraDatabase != null && libraDatabase.Exists) {
                 const string LibraConnectionStringFormat = @"metadata=res://*/Libra.LibraModel.csdl|res://*/Libra.LibraModel.ssdl|res://*/Libra.LibraModel.msl;provider=System.Data.SQLite.EF6;provider connection string='data source=""{0}""'";
                 var connStr = string.Format(LibraConnectionStringFormat, libraDatabase.FullName);

@@ -74,6 +74,8 @@ namespace SaintCoinach.Xiv {
 
         public int Key { get { return _SourceRow.Key; } }
 
+        public ClientType ClientType { get { return Sheet.Collection.ClientType; } }
+
         public object this[int columnIndex] { get { return _SourceRow[columnIndex]; } }
 
         public IEnumerable<object> ColumnValues() => _SourceRow.ColumnValues();

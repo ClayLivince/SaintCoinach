@@ -8,6 +8,8 @@ namespace SaintCoinach.Xiv {
 
         new IXivSheet Sheet { get; }
 
+        ClientType ClientType { get; }
+
         #endregion
     }
 }
