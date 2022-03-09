@@ -1,3 +1,6 @@
+## Hey! This branch aim to resolve client difference of China and Global SaintCoinach. Namespace has been changed to "SaintCoinachCN" to distinguish them.
+## Definition is calibrated to 5.57 CN client one.
+
 # Saint Coinach
 
 A .NET library written in C# for extracting game assets and reading game assets from **Final Fantasy XIV**, now with support for including the Libra Eorzea database.
