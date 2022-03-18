@@ -1,8 +1,7 @@
 {
   "sheet": "IKDRoute",
   "defaultColumn": "Name",
-  "definitions": [
-    {
+  "definitions": [    {
       "type": "repeat",
       "count": 3,
       "definition": {

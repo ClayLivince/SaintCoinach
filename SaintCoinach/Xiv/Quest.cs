@@ -5,6 +5,15 @@ using SaintCoinach.Ex.Relational;
 
 namespace SaintCoinach.Xiv {
     public class Quest : XivRow, IItemSource {
+
+        private static Dictionary<int, string> _EXPANSIONCODEINDEX = new Dictionary<int, string>() {
+            { 0, "ffxiv" },
+            { 1, "ex1" },
+            { 2, "ex2" },
+            { 3, "ex3" },
+            { 4, "ex4" },
+        };
+
         #region Fields
         private QuestRequirements _Requirements;
         private QuestRewards _Rewards;
@@ -16,6 +25,10 @@ namespace SaintCoinach.Xiv {
         public Text.XivString Name { get { return AsString("Name"); } }
 
         public Text.XivString Id { get { return AsString("Id"); } }
+
+        public string ExpansionCode {
+            get { return _EXPANSIONCODEINDEX[As<XivRow>("Expansion").Key]; }
+        }
 
         public QuestRequirements Requirements { get { return _Requirements ?? (_Requirements = new QuestRequirements(this)); } }
 
