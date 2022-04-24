@@ -1,3 +1,8 @@
+## Hey! This branch aim to resolve client difference of China and Global SaintCoinach.
+## You need to append the client type at the end of normal args of SaintCoinach or SC.Cmd.
+## Such as ./SaintCoinach.Cmd.exe \<gamepath\> cn
+## Definition is calibrated to 6.0 CN client one.
+
 # Saint Coinach
 
 A .NET library written in C# for extracting game assets and reading game assets from **Final Fantasy XIV**, now with support for including the Libra Eorzea database.

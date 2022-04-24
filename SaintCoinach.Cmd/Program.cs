@@ -23,11 +23,17 @@ namespace SaintCoinach.Cmd {
     class Program {
         private static void Main(string[] args) {
             var dataPath = Properties.Settings.Default.DataPath;
+            var version = "global";
 
-            if (args.Length > 0) {
+            if (args.Length > 1) {
                 dataPath = args[0];
-                args = args.Skip(1).ToArray();
+                version = args[1];
+                args = args.Skip(2).ToArray();
             }
+
+            if (version == "global")
+                version = "";
+
             if (string.IsNullOrWhiteSpace(dataPath))
                 dataPath = SearchForDataPaths().FirstOrDefault(p => System.IO.Directory.Exists(p));
             if (string.IsNullOrWhiteSpace(dataPath) || !System.IO.Directory.Exists(dataPath)) {
@@ -37,7 +43,7 @@ namespace SaintCoinach.Cmd {
                 return;
             }
 
-            var realm = new ARealmReversed(dataPath, @"SaintCoinach.History.zip", Ex.Language.English, @"app_data.sqlite");
+            var realm = new ARealmReversed(dataPath, $"SaintCoinach{version}.History.zip", Ex.Language.English, @"app_data.sqlite", version);
             realm.Packs.GetPack(new IO.PackIdentifier("exd", IO.PackIdentifier.DefaultExpansion, 0)).KeepInMemory = true;
 
             Console.WriteLine("Game version: {0}", realm.GameVersion);

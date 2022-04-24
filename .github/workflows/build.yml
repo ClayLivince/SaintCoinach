@@ -30,7 +30,7 @@ jobs:
           .\MSBuild.exe $Env:GITHUB_WORKSPACE\SaintCoinach.sln /t:Build /p:Configuration=Release
           
       - name: Create Release ZIPs
-        if: ${{ github.ref == 'refs/heads/master' }}
+        if: ${{ github.ref == 'refs/heads/cn' }}
         run: |
           mkdir release-out
           Compress-Archive -Path .\Godbert\bin\Release\* -DestinationPath .\release-out\Godbert.zip -Force
@@ -38,12 +38,12 @@ jobs:
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
-        if: ${{ github.ref == 'refs/heads/master' }}
+        if: ${{ github.ref == 'refs/heads/cn' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           files: release-out\**
-          name: Release for ${{ steps.define-version.outputs.commit }}
+          name: CN Release for ${{ steps.define-version.outputs.commit }}
           body_path:  .github\RELEASE.md
           prerelease: false
           tag_name:  ${{ steps.define-version.outputs.commit }}
