@@ -3,6 +3,7 @@
   "defaultColumn": "Member",
   "definitions": [
     {
+      "index": 2,
       "name": "Member",
       "converter": {
         "type": "link",
