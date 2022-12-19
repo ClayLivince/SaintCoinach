@@ -212,6 +212,7 @@ namespace SaintCoinach {
                     client = ClientType.KOREA;
                     break;
                 case "":
+                case "global":
                 case null:
                     break;
                 default:
@@ -223,6 +224,8 @@ namespace SaintCoinach {
 
             _GameVersion = File.ReadAllText(Path.Combine(gameDirectory.FullName, "game", "ffxivgame.ver"));
             _StateFile = storeFile;
+            if (version == "global")
+                version = "";
 
             if (string.IsNullOrEmpty(version))
                 _GameData.Definition = ReadDefinition();

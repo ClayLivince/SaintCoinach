@@ -101,7 +101,10 @@ namespace SaintCoinach.IO {
 
             string expansion = null;
             byte number = 0;
-            if (expSep > typeSep) {
+            if (type == "vfx") {
+                number = 0;
+            }
+            else if (expSep > typeSep) {
                 expansion = fullPath.Substring(typeSep + 1, expSep - typeSep - 1);
                 var numberEnd = fullPath.IndexOf('_', expSep);
                 if (numberEnd - expSep == 3) {
