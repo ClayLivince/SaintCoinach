@@ -20,11 +20,19 @@
       "name": "FontColor"
     },
     {
-      "index": 7,
-      "name": "SortKey"
+      "index": 6,
+      "name": "UnlockCondition",
+      "converter": {
+        "type": "link",
+        "target": "BannerCondition"
+      }
     },
     {
       "index": 8,
+      "name": "SortKey"
+    },
+    {
+      "index": 9,
       "name": "Name"
     }
   ]
