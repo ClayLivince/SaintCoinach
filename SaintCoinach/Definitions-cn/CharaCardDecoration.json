@@ -1,4 +1,32 @@
 {
   "sheet": "CharaCardDecoration",
-  "definitions": []
+  "defaultColumn": "Name",
+  "definitions": [
+    {
+      "name": "Category"
+    },
+    {
+      "index": 2,
+      "name": "Image",
+      "converter": {
+        "type": "icon"
+      }
+    },
+    {
+      "index": 4,
+      "name": "UnlockCondition",
+      "converter": {
+        "type": "link",
+        "target": "BannerCondition"
+      }
+    },
+    {
+      "index": 6,
+      "name": "SortKey"
+    },
+    {
+      "index": 7,
+      "name": "Name"
+    }
+  ]
 }

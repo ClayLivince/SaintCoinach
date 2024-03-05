@@ -5,10 +5,6 @@
       "name": "FallDamage"
     },
     {
-      "index": 1,
-      "name": "Height"
-    },
-    {
       "index": 2,
       "name": "LoopMotion",
       "converter": {

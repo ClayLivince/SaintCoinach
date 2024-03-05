@@ -50,10 +50,10 @@ namespace SaintCoinach.Graphics.Lgb {
             //uint[] Unknown = new uint[100];
             //System.Buffer.BlockCopy(buffer, offset + System.Runtime.InteropServices.Marshal.SizeOf<HeaderData>(), Unknown, 0, 400);
 
-            
+
             var entriesOffset = offset + Header.EntriesOffset;
             Entries = new ILgbEntry[Header.EntryCount];
-            for(var i = 0; i < Header.EntryCount; ++i) {
+            for (var i = 0; i < Header.EntryCount; ++i) {
                 var entryOffset = entriesOffset + BitConverter.ToInt32(buffer, entriesOffset + i * 4);
                 var type = (LgbEntryType)BitConverter.ToInt32(buffer, entryOffset);
 
@@ -78,12 +78,16 @@ namespace SaintCoinach.Graphics.Lgb {
                         case LgbEntryType.Vfx:
                             Entries[i] = new LgbVfxEntry(Parent.File.Pack.Collection, buffer, entryOffset);
                             break;
+                        case LgbEntryType.FateRange:
+                            Debug.WriteLine($"{Parent.File.Path} {type} at 0x{entryOffset:X} in {Name}: Can't read type.");
+                            break;
                         default:
                             // TODO: Work out other parts.
                             //Debug.WriteLine($"{Parent.File.Path} {type} at 0x{entryOffset:X} in {Name}: Can't read type.");
                             break;
                     }
-                } catch (Exception ex) {
+                }
+                catch (Exception ex) {
                     Debug.WriteLine($"{Parent.File.Path} {type} at 0x{entryOffset:X} in {Name} failure: {ex.Message}");
                 }
             }

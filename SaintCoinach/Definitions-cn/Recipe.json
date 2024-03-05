@@ -3,9 +3,6 @@
   "defaultColumn": "Item{Result}",
   "definitions": [
     {
-      "name": "Number"
-    },
-    {
       "index": 1,
       "name": "CraftType",
       "converter": {
@@ -80,6 +77,10 @@
     {
       "index": 30,
       "name": "DurabilityFactor"
+    },
+    {
+      "index": 31,
+      "name": "RequiredQuality"
     },
     {
       "index": 32,

@@ -13,7 +13,7 @@ namespace SaintCoinach.Ex.Relational.Update {
     public class RelationUpdater {
         #region Static
 
-        private const Language UsedLanguage = Language.Japanese;
+        private const Language UsedLanguage = Language.ChineseSimplified;
 
         #endregion
 

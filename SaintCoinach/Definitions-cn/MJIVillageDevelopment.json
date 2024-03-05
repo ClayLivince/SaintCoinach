@@ -1,4 +1,28 @@
 {
   "sheet": "MJIVillageDevelopment",
-  "definitions": []
+  "definitions": [
+    {
+      "name": "ENPC",
+      "converter": {
+        "type": "link",
+        "target": "ENpcResident"
+      }
+    },
+    {
+      "index": 9,
+      "name": "Behavior[0]",
+      "converter": {
+        "type": "link",
+        "target": "Behavior"
+      }
+    },
+    {
+      "index": 11,
+      "name": "Behavior[1]",
+      "converter": {
+        "type": "link",
+        "target": "Behavior"
+      }
+    }
+  ]
 }

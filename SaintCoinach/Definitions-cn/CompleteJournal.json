@@ -14,10 +14,6 @@
       }
     },
     {
-      "index": 5,
-      "name": "Name"
-    },
-    {
       "index": 6,
       "type": "repeat",
       "count": 24,

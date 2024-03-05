@@ -227,14 +227,22 @@ namespace SaintCoinach.Ex.Relational.Update {
             foreach (var prevRow in prevRows) {
                 if (!updatedRowIndex.TryGetValue(prevRow.FullKey, out var updatedRow))
                     continue;
+                try
+                {
+                    var prevRowFields =
+                        _PreviousSheet.Header.Columns.OrderBy(_ => _.Index).Select(_ => prevRow[_.Index]).ToArray();
+                    var updatedRowFields =
+                        _UpdatedSheet.Header.Columns.OrderBy(_ => _.Index).Select(_ => updatedRow[_.Index]).ToArray();
 
-                var prevRowFields =
-                    _PreviousSheet.Header.Columns.OrderBy(_ => _.Index).Select(_ => prevRow[_.Index]).ToArray();
-                var updatedRowFields =
-                    _UpdatedSheet.Header.Columns.OrderBy(_ => _.Index).Select(_ => updatedRow[_.Index]).ToArray();
-
-                foreach (var def in defUpdaters)
-                    def.MatchRow(prevRowFields, updatedRowFields, comparers);
+                    foreach (var def in defUpdaters)
+                        def.MatchRow(prevRowFields, updatedRowFields, comparers);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error happened while matching Rows in {_PreviousSheet.Name}");
+                    continue;
+                }
+                
             }
 
             return defUpdaters;
