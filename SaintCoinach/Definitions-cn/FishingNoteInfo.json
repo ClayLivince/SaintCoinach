@@ -3,6 +3,7 @@
   "defaultColumn": "Item",
   "definitions": [
     {
+      "index": 0,
       "name": "Size"
     },
     {

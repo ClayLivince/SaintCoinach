@@ -9,16 +9,16 @@
       }
     },
     {
-      "index": 9,
       "name": "Behavior[0]",
+      "index": 9,
       "converter": {
         "type": "link",
         "target": "Behavior"
       }
     },
     {
-      "index": 11,
       "name": "Behavior[1]",
+      "index": 11,
       "converter": {
         "type": "link",
         "target": "Behavior"

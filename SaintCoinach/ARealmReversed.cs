@@ -186,7 +186,7 @@ namespace SaintCoinach {
         /// <param name="storePath">Path to the file used for storing definitions and history.</param>
         /// <param name="language">Initial language to use.</param>
         /// <param name="libraPath">Path to the Libra Eorzea database file.</param>
-        public ARealmReversed(string gamePath, string storePath, Language language, string libraPath, string version) : this(new DirectoryInfo(gamePath), new FileInfo(storePath), language, new FileInfo(libraPath), version) { }
+        public ARealmReversed(string gamePath, string storePath, Language language, string libraPath, string version) : this(new DirectoryInfo(gamePath), new FileInfo(storePath), language, libraPath == null ? null : new FileInfo(libraPath), version) { }
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ARealmReversed" /> class.
