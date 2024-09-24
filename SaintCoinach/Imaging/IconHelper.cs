@@ -9,7 +9,7 @@ namespace SaintCoinach.Imaging {
     using IO;
 
     public static class IconHelper {
-        static bool PreferHighRes = false;
+        public static bool PreferHighRes = false;
 
         const string IconFileFormat = "ui/icon/{0:D3}000/{1}{2:D6}.tex";
         const string IconHr1FileFormat = "ui/icon/{0:D3}000/{1}{2:D6}_hr1.tex";

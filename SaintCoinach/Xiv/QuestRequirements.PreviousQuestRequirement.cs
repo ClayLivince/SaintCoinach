@@ -14,7 +14,7 @@ namespace SaintCoinach.Xiv {
 
             #region Constructor
             internal PreviousQuestRequirement(Quest quest) {
-                const int QuestCount = 3;
+                const int QuestCount = 4;
 
                 this.Type = (PrerequisiteQuestsRequirementType)quest.AsInt32("PreviousQuestJoin");
 

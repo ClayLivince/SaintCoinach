@@ -72,6 +72,12 @@ namespace SaintCoinach.Xiv {
         public bool IsDyeable { get { return AsInt16("DyeCount") > 0; } }
 
         /// <summary>
+        ///     Gets a value indicating whether the current item is dyeable.
+        /// </summary>
+        /// <value>A value indicating whether the current item is dyeable.</value>
+        public int DyeCount { get { return AsInt16("DyeCount"); } }
+
+        /// <summary>
         /// Gets a value indicating whether the current item is collectable.
         /// </summary>
         /// <value>A value indicaating whether the current item is collectable.</value>
