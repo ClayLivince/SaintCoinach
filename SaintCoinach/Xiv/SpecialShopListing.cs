@@ -10,10 +10,10 @@ namespace SaintCoinach.Xiv {
 
         private static Dictionary<int, int> _Currencies = new Dictionary<int, int>() {
             { 1, 28 },
-            { 2, 25199 },
-            { 4, 25200 },
-            { 6, 33913 },
-            { 7, 33914 }
+            { 2, 33913 },
+            { 4, 33914 },
+            { 6, 41784 },
+            { 7, 41785 }
         };
 
         private static Dictionary<int, int> _Tomestones;
