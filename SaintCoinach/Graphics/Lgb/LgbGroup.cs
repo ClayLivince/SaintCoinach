@@ -47,8 +47,8 @@ namespace SaintCoinach.Graphics.Lgb {
             this.Header = buffer.ToStructure<HeaderData>(offset);
             this.Name = buffer.ReadString(offset + Header.GroupNameOffset);
 
-            //uint[] Unknown = new uint[100];
-            //System.Buffer.BlockCopy(buffer, offset + System.Runtime.InteropServices.Marshal.SizeOf<HeaderData>(), Unknown, 0, 400);
+            uint[] Unknown = new uint[100];
+            System.Buffer.BlockCopy(buffer, offset + System.Runtime.InteropServices.Marshal.SizeOf<HeaderData>(), Unknown, 0, 400);
 
 
             var entriesOffset = offset + Header.EntriesOffset;
@@ -78,8 +78,10 @@ namespace SaintCoinach.Graphics.Lgb {
                         case LgbEntryType.Vfx:
                             Entries[i] = new LgbVfxEntry(Parent.File.Pack.Collection, buffer, entryOffset);
                             break;
+                        case LgbEntryType.EventRange:
                         case LgbEntryType.FateRange:
                             Debug.WriteLine($"{Parent.File.Path} {type} at 0x{entryOffset:X} in {Name}: Can't read type.");
+                            Entries[i] = new LgbFateRangeEntry(Parent.File.Pack.Collection, buffer, entryOffset);
                             break;
                         default:
                             // TODO: Work out other parts.

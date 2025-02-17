@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using SaintCoinach.Libra;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace SaintCoinach.Xiv {
@@ -30,6 +32,22 @@ namespace SaintCoinach.Xiv {
 
             for (int i = 0; i < sTomestonesItems.Length; i++) {
                 _Tomestones[i + 1] = sTomestonesItems[i].Item.Key;
+            }
+        }
+
+        private static int GetCurrency(int key) {
+            if (_Currencies.ContainsKey(key)) {
+                return _Currencies[key];
+            }
+            return key;
+        }
+
+        private static int GetTomestoneCoveredCurrency(int key) {
+            if (key <= 3) {
+                return _Tomestones[key];
+            }
+            else {
+                return GetCurrency(key);
             }
         }
 
@@ -109,27 +127,45 @@ namespace SaintCoinach.Xiv {
 
                 var hq = shop.AsBoolean("HQ{Cost}", index, i);
 
+                int res = item.Key;
                 if (item.Key < 8) {
                     switch (UseCurrencyType) {
                         case 16:
-                            item = shop.Sheet.Collection.GetSheet<Item>()
-                                [_Currencies[item.Key]];
+                            res = _Currencies[item.Key];
                             break;
                         case 8:
-                            item = shop.Sheet.Collection.GetSheet<Item>()
-                                [1];
+                            res = 1;
                             break;
                         case 4:
+                        case 2:
                             if (_Tomestones == null) {
                                 BuildTomestones();
                             }
-                            item = shop.Sheet.Collection.GetSheet<Item>()
-                                [_Tomestones[item.Key]];
+                            res = _Tomestones[item.Key];
                             break;
                     }
+                }
+
+                if (SpecialShop.Key == 1770637 || SpecialShop.Key == 1770310) {
+                    res = GetCurrency(item.Key);
+                } else if (SpecialShop.Key == 1770446 || SpecialShop.Key == 1769500 || (SpecialShop.Key == 1770699 && item.Key < 10)) {
+                    res = GetTomestoneCoveredCurrency(item.Key);
+                } else {
+                    if (UseCurrencyType == 16 && item.Key != 25) {
+                        res = GetCurrency(item.Key);
+                    }
+
+                    if ((UseCurrencyType == 2) && item.Key < 10) {
+                        res = GetTomestoneCoveredCurrency(item.Key);
+                    }
+                }
+
+                if (res != item.Key) {
                     hq = false;
                 }
-                
+                item = shop.Sheet.Collection.GetSheet<Item>()[res];
+
+
                 var collectabilityRating = shop.AsInt16("CollectabilityRating{Cost}", index, i);
 
                 costs.Add(new ShopListingItem(this, item, count, hq, collectabilityRating));

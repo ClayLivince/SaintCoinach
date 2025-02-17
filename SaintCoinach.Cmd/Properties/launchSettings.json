@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SaintCoinach.Cmd-WP": {
+      "commandName": "Project",
+      "commandLineArgs": "\"D:\\\\Games\\\\FFXIV\\\\DawnTrail\" cn"
+    }
+  }
+}
