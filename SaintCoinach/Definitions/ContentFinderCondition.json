@@ -118,12 +118,12 @@
       "name": "AllowExplorerMode"
     },
     {
-      "index": 28,
-      "name": "DutyRecorderAllowed"
+      "index": 32,
+      "name": "HighEndDuty"
     },
     {
-      "index": 29,
-      "name": "LevelCapRoulette"
+      "index": 38,
+      "name": "DutyRecorderAllowed"
     },
     {
       "index": 43,
@@ -203,6 +203,10 @@
       "name": "GuildHestRoulette"
     },
     {
+      "index": 61,
+      "name": "ExpertRoulette"
+    },
+    {
       "index": 62,
       "name": "TrialRoulette"
     },
@@ -212,23 +216,19 @@
     },
     {
       "index": 64,
-      "name": "ExpertRoulette"
+      "name": "LevelCapRoulette"
     },
     {
       "index": 65,
       "name": "MentorRoulette"
     },
     {
-      "index": 66,
-      "name": "HighEndDuty"
-    },
-    {
-      "index": 70,
-      "name": "FeastTeamRoulette"
-    },
-    {
       "index": 71,
       "name": "AllianceRoulette"
+    },
+    {
+      "index": 72,
+      "name": "FeastTeamRoulette"
     },
     {
       "index": 73,
