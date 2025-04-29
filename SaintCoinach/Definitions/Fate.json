@@ -87,14 +87,6 @@
       }
     },
     {
-      "index": 19,
-      "name": "Music",
-      "converter": {
-        "type": "link",
-        "target": "BGM"
-      }
-    },
-    {
       "index": 20,
       "name": "LGBGuardNPCLocation"
     },
@@ -155,7 +147,7 @@
       "name": "FATEChain"
     },
     {
-      "index": 36,
+      "index": 35,
       "name": "ArrayIndex",
       "converter": {
         "type": "link",
@@ -163,15 +155,7 @@
       }
     },
     {
-      "index": 38,
-      "name": "ReqEventItem",
-      "converter": {
-        "type": "link",
-        "target": "EventItem"
-      }
-    },
-    {
-      "index": 39,
+      "index": 37,
       "name": "TurnInEventItem",
       "converter": {
         "type": "link",
@@ -179,7 +163,15 @@
       }
     },
     {
-      "index": 43,
+      "index": 39,
+      "name": "ReqEventItem",
+      "converter": {
+        "type": "link",
+        "target": "EventItem"
+      }
+    },
+    {
+      "index": 79,
       "type": "repeat",
       "count": 8,
       "definition": {

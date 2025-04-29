@@ -2,7 +2,7 @@
   "sheet": "CompleteJournalCategory",
   "definitions": [
     {
-      "name": "FirstQuest",
+      "name": "LastQuest",
       "converter": {
         "type": "link",
         "target": "CompleteJournal"
@@ -10,7 +10,7 @@
     },
     {
       "index": 1,
-      "name": "LastQuest",
+      "name": "FirstQuest",
       "converter": {
         "type": "link",
         "target": "CompleteJournal"
