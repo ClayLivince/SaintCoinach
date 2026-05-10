@@ -3,7 +3,6 @@
   "defaultColumn": "TitleCase",
   "definitions": [
     {
-      "index": 0,
       "name": "Icon",
       "converter": {
         "type": "icon"

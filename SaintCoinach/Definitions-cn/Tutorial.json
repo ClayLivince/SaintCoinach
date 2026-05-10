@@ -3,15 +3,15 @@
   "defaultColumn": "Objective",
   "definitions": [
     {
-      "index": 4,
+      "index": 5,
       "name": "Exp"
     },
     {
-      "index": 5,
+      "index": 6,
       "name": "Gil"
     },
     {
-      "index": 6,
+      "index": 7,
       "name": "Reward{Tank}",
       "converter": {
         "type": "link",
@@ -19,7 +19,7 @@
       }
     },
     {
-      "index": 7,
+      "index": 8,
       "name": "Reward{Melee}",
       "converter": {
         "type": "link",
@@ -27,7 +27,7 @@
       }
     },
     {
-      "index": 8,
+      "index": 9,
       "name": "Reward{Ranged}",
       "converter": {
         "type": "link",
@@ -35,7 +35,7 @@
       }
     },
     {
-      "index": 9,
+      "index": 11,
       "name": "Objective",
       "converter": {
         "type": "link",

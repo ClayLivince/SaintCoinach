@@ -5,10 +5,10 @@
     {
       "index": 1,
       "name": "GlassesStyle",
-        "converter": {
-          "type": "link",
-          "target": "GlassesStyle"
-        }
+      "converter": {
+        "type": "link",
+        "target": "GlassesStyle"
+      }
     },
     {
       "index": 2,

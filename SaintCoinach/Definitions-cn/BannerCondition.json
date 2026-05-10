@@ -182,11 +182,11 @@
       }
     },
     {
-      "index": 11,
+      "index": 12,
       "name": "PrerequisiteType"
     },
     {
-      "index": 12,
+      "index": 13,
       "name": "Prerequisite",
       "converter": {
         "type": "complexlink",
@@ -216,7 +216,7 @@
       }
     },
     {
-      "index": 13,
+      "index": 14,
       "name": "UnlockHint",
       "converter": {
         "type": "link",

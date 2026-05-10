@@ -358,7 +358,7 @@
       }
     },
     {
-      "index": 662,
+      "index": 790,
       "type": "repeat",
       "count": 64,
       "definition": {
@@ -366,7 +366,7 @@
       }
     },
     {
-      "index": 726,
+      "index": 854,
       "type": "repeat",
       "count": 64,
       "definition": {
@@ -374,7 +374,7 @@
       }
     },
     {
-      "index": 790,
+      "index": 918,
       "type": "repeat",
       "count": 64,
       "definition": {
@@ -382,7 +382,7 @@
       }
     },
     {
-      "index": 854,
+      "index": 982,
       "type": "repeat",
       "count": 64,
       "definition": {
@@ -390,7 +390,7 @@
       }
     },
     {
-      "index": 918,
+      "index": 1046,
       "type": "repeat",
       "count": 64,
       "definition": {
@@ -398,7 +398,7 @@
       }
     },
     {
-      "index": 982,
+      "index": 1110,
       "type": "repeat",
       "count": 64,
       "definition": {
@@ -406,7 +406,7 @@
       }
     },
     {
-      "index": 1046,
+      "index": 1174,
       "type": "repeat",
       "count": 64,
       "definition": {
@@ -414,7 +414,7 @@
       }
     },
     {
-      "index": 1110,
+      "index": 1238,
       "type": "repeat",
       "count": 64,
       "definition": {
@@ -422,7 +422,7 @@
       }
     },
     {
-      "index": 1174,
+      "index": 1302,
       "type": "repeat",
       "count": 24,
       "definition": {
@@ -430,7 +430,7 @@
       }
     },
     {
-      "index": 1198,
+      "index": 1326,
       "type": "repeat",
       "count": 24,
       "definition": {
@@ -438,7 +438,7 @@
       }
     },
     {
-      "index": 1222,
+      "index": 1350,
       "type": "repeat",
       "count": 8,
       "definition": {
@@ -454,7 +454,7 @@
       }
     },
     {
-      "index": 1414,
+      "index": 1542,
       "type": "repeat",
       "count": 24,
       "definition": {
@@ -462,11 +462,11 @@
       }
     },
     {
-      "index": 1438,
+      "index": 1566,
       "name": "Level{Max}"
     },
     {
-      "index": 1439,
+      "index": 1567,
       "name": "ClassJob{Required}",
       "converter": {
         "type": "link",
@@ -474,7 +474,7 @@
       }
     },
     {
-      "index": 1440,
+      "index": 1568,
       "name": "QuestRewardOtherDisplay",
       "converter": {
         "type": "link",
@@ -482,15 +482,15 @@
       }
     },
     {
-      "index": 1441,
+      "index": 1569,
       "name": "ExpFactor"
     },
     {
-      "index": 1442,
+      "index": 1570,
       "name": "GilReward"
     },
     {
-      "index": 1443,
+      "index": 1571,
       "name": "CurrencyReward",
       "converter": {
         "type": "link",
@@ -498,11 +498,11 @@
       }
     },
     {
-      "index": 1444,
+      "index": 1572,
       "name": "CurrencyRewardCount"
     },
     {
-      "index": 1445,
+      "index": 1573,
       "type": "repeat",
       "count": 3,
       "definition": {
@@ -514,7 +514,7 @@
       }
     },
     {
-      "index": 1448,
+      "index": 1576,
       "type": "repeat",
       "count": 3,
       "definition": {
@@ -522,11 +522,11 @@
       }
     },
     {
-      "index": 1451,
+      "index": 1579,
       "name": "ItemRewardType"
     },
     {
-      "index": 1452,
+      "index": 1580,
       "type": "repeat",
       "count": 7,
       "definition": {
@@ -574,7 +574,7 @@
       }
     },
     {
-      "index": 1459,
+      "index": 1587,
       "type": "repeat",
       "count": 7,
       "definition": {
@@ -582,7 +582,7 @@
       }
     },
     {
-      "index": 1473,
+      "index": 1601,
       "type": "repeat",
       "count": 7,
       "definition": {
@@ -594,7 +594,7 @@
       }
     },
     {
-      "index": 1480,
+      "index": 1608,
       "type": "repeat",
       "count": 5,
       "definition": {
@@ -606,7 +606,7 @@
       }
     },
     {
-      "index": 1485,
+      "index": 1613,
       "type": "repeat",
       "count": 5,
       "definition": {
@@ -614,7 +614,7 @@
       }
     },
     {
-      "index": 1490,
+      "index": 1618,
       "type": "repeat",
       "count": 5,
       "definition": {
@@ -622,7 +622,7 @@
       }
     },
     {
-      "index": 1495,
+      "index": 1623,
       "type": "repeat",
       "count": 5,
       "definition": {
@@ -634,7 +634,7 @@
       }
     },
     {
-      "index": 1500,
+      "index": 1628,
       "name": "Emote{Reward}",
       "converter": {
         "type": "link",
@@ -642,7 +642,7 @@
       }
     },
     {
-      "index": 1501,
+      "index": 1629,
       "name": "Action{Reward}",
       "converter": {
         "type": "link",
@@ -650,7 +650,7 @@
       }
     },
     {
-      "index": 1502,
+      "index": 1630,
       "type": "repeat",
       "count": 2,
       "definition": {
@@ -662,11 +662,11 @@
       }
     },
     {
-      "index": 1504,
+      "index": 1632,
       "name": "System{Reward}[0]"
     },
     {
-      "index": 1505,
+      "index": 1633,
       "name": "Other{Reward}",
       "converter": {
         "type": "link",
@@ -674,15 +674,15 @@
       }
     },
     {
-      "index": 1506,
+      "index": 1634,
       "name": "System{Reward}[1]"
     },
     {
-      "index": 1507,
+      "index": 1635,
       "name": "GCType{Reward}"
     },
     {
-      "index": 1508,
+      "index": 1636,
       "name": "InstanceContent{Unlock}",
       "converter": {
         "type": "link",
@@ -690,11 +690,11 @@
       }
     },
     {
-      "index": 1509,
+      "index": 1637,
       "name": "Tomestone"
     },
     {
-      "index": 1510,
+      "index": 1638,
       "name": "Tomestone{Reward}",
       "converter": {
         "type": "complexlink",
@@ -708,15 +708,15 @@
       }
     },
     {
-      "index": 1511,
+      "index": 1639,
       "name": "TomestoneCount{Reward}"
     },
     {
-      "index": 1512,
+      "index": 1640,
       "name": "ReputationReward"
     },
     {
-      "index": 1513,
+      "index": 1641,
       "name": "PlaceName",
       "converter": {
         "type": "link",
@@ -724,7 +724,7 @@
       }
     },
     {
-      "index": 1514,
+      "index": 1642,
       "name": "JournalGenre",
       "converter": {
         "type": "link",
@@ -732,29 +732,29 @@
       }
     },
     {
-      "index": 1516,
+      "index": 1644,
       "name": "Icon",
       "converter": {
         "type": "icon"
       }
     },
     {
-      "index": 1517,
+      "index": 1645,
       "name": "Icon{Special}",
       "converter": {
         "type": "icon"
       }
     },
     {
-      "index": 1518,
+      "index": 1646,
       "name": "Introduction"
     },
     {
-      "index": 1519,
+      "index": 1647,
       "name": "HideOfferIcon"
     },
     {
-      "index": 1520,
+      "index": 1648,
       "name": "EventIconType",
       "converter": {
         "type": "link",
@@ -762,7 +762,7 @@
       }
     },
     {
-      "index": 1522,
+      "index": 1650,
       "name": "SortKey"
     }
   ]

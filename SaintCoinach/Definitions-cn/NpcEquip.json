@@ -65,11 +65,11 @@
       "name": "Visor"
     },
     {
-      "index": 10,
+      "index": 11,
       "name": "Model{Body}"
     },
     {
-      "index": 11,
+      "index": 12,
       "name": "Dye{Body}",
       "converter": {
         "type": "link",
@@ -77,7 +77,7 @@
       }
     },
     {
-      "index": 12,
+      "index": 13,
       "name": "Dye2{Body}",
       "converter": {
         "type": "link",
@@ -85,11 +85,11 @@
       }
     },
     {
-      "index": 13,
+      "index": 14,
       "name": "Model{Hands}"
     },
     {
-      "index": 14,
+      "index": 15,
       "name": "Dye{Hands}",
       "converter": {
         "type": "link",
@@ -97,7 +97,7 @@
       }
     },
     {
-      "index": 15,
+      "index": 16,
       "name": "Dye2{Hands}",
       "converter": {
         "type": "link",
@@ -105,11 +105,11 @@
       }
     },
     {
-      "index": 16,
+      "index": 17,
       "name": "Model{Legs}"
     },
     {
-      "index": 17,
+      "index": 18,
       "name": "Dye{Legs}",
       "converter": {
         "type": "link",
@@ -117,7 +117,7 @@
       }
     },
     {
-      "index": 18,
+      "index": 19,
       "name": "Dye2{Legs}",
       "converter": {
         "type": "link",
@@ -125,11 +125,11 @@
       }
     },
     {
-      "index": 19,
+      "index": 20,
       "name": "Model{Feet}"
     },
     {
-      "index": 20,
+      "index": 21,
       "name": "Dye{Feet}",
       "converter": {
         "type": "link",
@@ -137,7 +137,7 @@
       }
     },
     {
-      "index": 21,
+      "index": 22,
       "name": "Dye2{Feet}",
       "converter": {
         "type": "link",
@@ -145,11 +145,11 @@
       }
     },
     {
-      "index": 22,
+      "index": 23,
       "name": "Model{Ears}"
     },
     {
-      "index": 23,
+      "index": 24,
       "name": "Dye{Ears}",
       "converter": {
         "type": "link",
@@ -157,7 +157,7 @@
       }
     },
     {
-      "index": 24,
+      "index": 25,
       "name": "Dye2{Ears}",
       "converter": {
         "type": "link",
@@ -165,11 +165,11 @@
       }
     },
     {
-      "index": 25,
+      "index": 26,
       "name": "Model{Neck}"
     },
     {
-      "index": 26,
+      "index": 27,
       "name": "Dye{Neck}",
       "converter": {
         "type": "link",
@@ -177,7 +177,7 @@
       }
     },
     {
-      "index": 27,
+      "index": 28,
       "name": "Dye2{Neck}",
       "converter": {
         "type": "link",
@@ -185,11 +185,11 @@
       }
     },
     {
-      "index": 28,
+      "index": 29,
       "name": "Model{Wrists}"
     },
     {
-      "index": 29,
+      "index": 30,
       "name": "Dye{Wrists}",
       "converter": {
         "type": "link",
@@ -197,7 +197,7 @@
       }
     },
     {
-      "index": 30,
+      "index": 31,
       "name": "Dye2{Wrists}",
       "converter": {
         "type": "link",
@@ -205,11 +205,11 @@
       }
     },
     {
-      "index": 31,
+      "index": 32,
       "name": "Model{LeftRing}"
     },
     {
-      "index": 32,
+      "index": 33,
       "name": "Dye{LeftRing}",
       "converter": {
         "type": "link",
@@ -217,7 +217,7 @@
       }
     },
     {
-      "index": 33,
+      "index": 34,
       "name": "Dye2{LeftRing}",
       "converter": {
         "type": "link",
@@ -225,11 +225,11 @@
       }
     },
     {
-      "index": 34,
+      "index": 35,
       "name": "Model{RightRing}"
     },
     {
-      "index": 35,
+      "index": 36,
       "name": "Dye{RightRing}",
       "converter": {
         "type": "link",
@@ -237,7 +237,7 @@
       }
     },
     {
-      "index": 36,
+      "index": 37,
       "name": "Dye2{RightRing}",
       "converter": {
         "type": "link",
