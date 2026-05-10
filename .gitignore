@@ -237,3 +237,9 @@ $RECYCLE.BIN/
 
 # JetBrains
 .idea
+
+# WinMerge / pre-edit backups
+*.bak
+*.orig
+# Periodic def backup archives
+def.*.zip
