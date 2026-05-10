@@ -148,9 +148,11 @@ namespace SaintCoinach.Xiv {
 
                 if (SpecialShop.Key == 1770637 || SpecialShop.Key == 1770310) {
                     res = GetCurrency(item.Key);
-                } else if (SpecialShop.Key == 1770446 || SpecialShop.Key == 1769500 || (SpecialShop.Key == 1770699 && item.Key < 10)) {
+                }
+                else if (SpecialShop.Key == 1770446 || SpecialShop.Key == 1769500 || (SpecialShop.Key == 1770699 && item.Key < 10)) {
                     res = GetTomestoneCoveredCurrency(item.Key);
-                } else {
+                }
+                else {
                     if (UseCurrencyType == 16 && item.Key != 25) {
                         res = GetCurrency(item.Key);
                     }

@@ -47,29 +47,39 @@ namespace SaintCoinach.Cmd.Commands {
                 }
             }
 
-            var orchestrion = _Realm.GameData.GetSheet("Orchestrion");
-            var orchestrionPath = _Realm.GameData.GetSheet("OrchestrionPath");
-            foreach (Xiv.IXivRow orchestrionInfo in orchestrion) {
-                var path = orchestrionPath[orchestrionInfo.Key];
-                var name = orchestrionInfo["Name"].ToString();
-                var filePath = path["File"].ToString();
+            Output($"Background Music Exported. Processing Orchestrion.", Tharga.Console.Entities.OutputLevel.Information);
 
-                if (string.IsNullOrWhiteSpace(filePath) || !IsMatch(searchStrings, filePath))
-                    continue;
+            try {
+                var orchestrion = _Realm.GameData.GetSheet("Orchestrion");
+                var orchestrionPath = _Realm.GameData.GetSheet("OrchestrionPath");
+                foreach (Xiv.IXivRow orchestrionInfo in orchestrion) {
+                    var filePath = "";
+                    try {
+                        var path = orchestrionPath[orchestrionInfo.Key];
+                        var name = orchestrionInfo["Name"].ToString();
+                        filePath = path["File"].ToString();
 
-                try {
-                    if (ExportFile(filePath, name)) {
-                        ++successCount;
-                    } else {
-                        OutputError($"File {filePath} not found.");
+                        if (string.IsNullOrWhiteSpace(filePath) || !IsMatch(searchStrings, filePath))
+                            continue;
+
+                        if (ExportFile(filePath, name)) {
+                            ++successCount;
+                        }
+                        else {
+                            OutputError($"File {filePath} not found.");
+                            ++failCount;
+                        }
+                    }
+                    catch (Exception e) {
+                        OutputError($"Export of {filePath} failed!");
+                        OutputError(e, true);
                         ++failCount;
                     }
                 }
-                catch (Exception e) {
-                    OutputError($"Export of {filePath} failed!");
-                    OutputError(e, true);
-                    ++failCount;
-                }
+            }
+            catch (Exception e) {
+                OutputError($"Export Orchestrion failed!");
+                OutputError(e, true);
             }
 
             OutputInformation($"{successCount} files exported, {failCount} failed");

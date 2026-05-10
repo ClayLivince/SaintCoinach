@@ -10,12 +10,20 @@
       }
     },
     {
+      "index": 1,
+      "name": "HQ{Disposed}"
+    },
+    {
       "index": 2,
       "name": "Item{Received}",
       "converter": {
         "type": "link",
         "target": "Item"
       }
+    },
+    {
+      "index": 3,
+      "name": "HQ{Received}"
     },
     {
       "index": 4,

@@ -15,7 +15,8 @@ namespace SaintCoinach.Cmd.Commands {
             "/fr",
             "/de",
             "/hq",
-            "/chs"
+            "/chs",
+            "/tc"
         };
 
         private ARealmReversed _Realm;
@@ -56,6 +57,9 @@ namespace SaintCoinach.Cmd.Commands {
 
             var count = 0;
             for (int i = min; i <= max; ++i) {
+                if (i % 1000 == 0) {
+                    Output($"Processing {i} / {max}", Tharga.Console.Entities.OutputLevel.Information);
+                }
                 try {
                     count += Process(i);
                 }

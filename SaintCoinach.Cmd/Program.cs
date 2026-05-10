@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Tharga.Console;
 using Tharga.Console.Commands;
@@ -40,7 +41,7 @@ namespace SaintCoinach.Cmd {
             if (string.IsNullOrWhiteSpace(dataPath))
                 dataPath = SearchForDataPaths().FirstOrDefault(p => System.IO.Directory.Exists(p));
             if (string.IsNullOrWhiteSpace(dataPath) || !System.IO.Directory.Exists(dataPath)) {
-                Console.WriteLine($"Need data!  The path '{dataPath}' doesn't exist.");
+                Console.WriteLine($"Need data! The path '{dataPath}' doesn't exist.");
                 Console.WriteLine("Press any key to exit...");
                 Console.ReadKey();
                 return;
@@ -52,6 +53,31 @@ namespace SaintCoinach.Cmd {
             Console.WriteLine("Client version: {0}", version);
             Console.WriteLine("Game version: {0}", realm.GameVersion);
             Console.WriteLine("Definition version: {0}", realm.DefinitionVersion);
+
+            Ex.Language targetLanguage = Ex.Language.English;
+            string clientType = "SquareEnix";
+
+            Dictionary<Ex.Language, string> langToTest = new Dictionary<Ex.Language, string>() {
+                { Ex.Language.ChineseSimplified, "Shanda" },
+                { Ex.Language.TraditionalChinese, "Userjoy" },
+                { Ex.Language.Korean, "ACTOZ" },
+                { Ex.Language.English, "SquareEnix" }
+            };
+
+            foreach (Ex.Language testLang in langToTest.Keys) {
+                try {
+                    realm.GameData.ActiveLanguage = testLang;
+                    var sheet = realm.GameData.GetSheet("Action");
+                    var _nd = sheet.Count;
+                    targetLanguage = testLang;
+                    clientType = langToTest[targetLanguage];
+                } catch (Exception) {
+
+                }
+            }
+            
+            Console.WriteLine($"Detected client type {clientType}, using {Enum.GetName(targetLanguage)}.");
+            realm.GameData.ActiveLanguage = targetLanguage;
             
             if (!realm.IsCurrentVersion) {
                 Console.Write("Update is available, perform update (Y/n)? ");

@@ -2,7 +2,6 @@
   "sheet": "TelepoRelay",
   "definitions": [
     {
-      "index": 0,
       "type": "repeat",
       "count": 8,
       "definition": {
@@ -11,15 +10,15 @@
           "type": "complexlink",
           "links": [
             {
-              "sheet": "TerritoryType",
-              "project": "PlaceName"
+              "project": "PlaceName",
+              "sheet": "TerritoryType"
             }
           ]
         }
       }
     },
     {
-      "index": 8,
+      "index": 9,
       "type": "repeat",
       "count": 8,
       "definition": {
@@ -28,15 +27,15 @@
           "type": "complexlink",
           "links": [
             {
-              "sheet": "TerritoryType",
-              "project": "PlaceName"
+              "project": "PlaceName",
+              "sheet": "TerritoryType"
             }
           ]
         }
       }
     },
     {
-      "index": 16,
+      "index": 18,
       "type": "repeat",
       "count": 8,
       "definition": {

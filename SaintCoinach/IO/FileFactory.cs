@@ -21,7 +21,8 @@ namespace SaintCoinach.IO {
                 case FileType.Model:
                     return new ModelFile(pack, header);
                 default:
-                    throw new NotSupportedException(string.Format("Unknown file type {0:X2}h", (int)header.FileType));
+                    return new FileDefault(pack, header);
+                    // throw new NotSupportedException(string.Format("Unknown file type {0:X2}h", (int)header.FileType));
             }
         }
     }

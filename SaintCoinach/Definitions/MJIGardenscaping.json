@@ -5,8 +5,8 @@
       "name": "Level"
     },
     {
-      "name": "Item",
       "index": 5,
+      "name": "Item",
       "converter": {
         "type": "link",
         "target": "Item"

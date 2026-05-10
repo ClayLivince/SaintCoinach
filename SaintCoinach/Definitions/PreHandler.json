@@ -19,7 +19,8 @@
           "InclusionShop",
           "GilShop",
           "SpecialShop",
-          "Description"
+          "Description",
+          "DisposalShop"
         ]
       }
     },
