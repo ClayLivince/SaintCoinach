@@ -117,19 +117,19 @@
       "name": "FinalBossExp"
     },
     {
-      "index": 23,
+      "index": 24,
       "name": "FinalBossCurrencyA"
     },
     {
-      "index": 24,
+      "index": 25,
       "name": "FinalBossCurrencyB"
     },
     {
-      "index": 25,
+      "index": 26,
       "name": "FinalBossCurrencyC"
     },
     {
-      "index": 26,
+      "index": 27,
       "type": "repeat",
       "count": 5,
       "definition": {
@@ -142,7 +142,7 @@
       }
     },
     {
-      "index": 31,
+      "index": 32,
       "type": "repeat",
       "count": 5,
       "definition": {
@@ -155,7 +155,7 @@
       }
     },
     {
-      "index": 36,
+      "index": 37,
       "type": "repeat",
       "count": 5,
       "definition": {
@@ -168,7 +168,7 @@
       }
     },
     {
-      "index": 41,
+      "index": 42,
       "type": "repeat",
       "count": 5,
       "definition": {
@@ -181,15 +181,15 @@
       }
     },
     {
-      "index": 46,
+      "index": 47,
       "name": "InstanceClearExp"
     },
     {
-      "index": 47,
+      "index": 48,
       "name": "InstanceClearGil"
     },
     {
-      "index": 48,
+      "index": 49,
       "name": "InstanceContentRewardItem",
       "converter": {
         "type": "link",
@@ -197,7 +197,7 @@
       }
     },
     {
-      "index": 52,
+      "index": 53,
       "name": "InstanceContentBuff",
       "converter": {
         "type": "link",
@@ -205,7 +205,7 @@
       }
     },
     {
-      "index": 54,
+      "index": 55,
       "name": "ReqInstance",
       "converter": {
         "type": "link",
@@ -213,11 +213,11 @@
       }
     },
     {
-      "index": 55,
+      "index": 56,
       "name": "PartyCondition"
     },
     {
-      "index": 58,
+      "index": 59,
       "name": "WeekRestriction"
     }
   ]

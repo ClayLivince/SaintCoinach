@@ -73,59 +73,59 @@
       "name": "IsRoleAction"
     },
     {
-      "index": 14,
+      "index": 15,
       "name": "Range"
     },
     {
-      "index": 15,
+      "index": 16,
       "name": "CanTargetSelf"
     },
     {
-      "index": 16,
+      "index": 17,
       "name": "CanTargetParty"
     },
     {
-      "index": 17,
+      "index": 18,
       "name": "CanTargetFriendly"
     },
     {
-      "index": 18,
+      "index": 19,
       "name": "CanTargetHostile"
     },
     {
-      "index": 21,
+      "index": 22,
       "name": "TargetArea"
     },
     {
-      "index": 25,
+      "index": 26,
       "name": "CanTargetDead"
     },
     {
-      "index": 27,
+      "index": 28,
       "name": "CastType"
     },
     {
-      "index": 28,
+      "index": 29,
       "name": "EffectRange"
     },
     {
-      "index": 29,
+      "index": 30,
       "name": "XAxisModifier"
     },
     {
-      "index": 31,
+      "index": 32,
       "name": "PrimaryCost{Type}"
     },
     {
-      "index": 32,
+      "index": 33,
       "name": "PrimaryCost{Value}"
     },
     {
-      "index": 33,
+      "index": 34,
       "name": "SecondaryCost{Type}"
     },
     {
-      "index": 34,
+      "index": 35,
       "name": "SecondaryCost{Value}",
       "converter": {
         "type": "complexlink",
@@ -155,7 +155,7 @@
       }
     },
     {
-      "index": 35,
+      "index": 36,
       "name": "Action{Combo}",
       "converter": {
         "type": "link",
@@ -163,31 +163,31 @@
       }
     },
     {
-      "index": 36,
+      "index": 37,
       "name": "PreservesCombo"
     },
     {
-      "index": 37,
+      "index": 38,
       "name": "Cast<100ms>"
     },
     {
-      "index": 39,
+      "index": 40,
       "name": "Recast<100ms>"
     },
     {
-      "index": 40,
+      "index": 41,
       "name": "CooldownGroup"
     },
     {
-      "index": 41,
+      "index": 42,
       "name": "AdditionalCooldownGroup"
     },
     {
-      "index": 42,
+      "index": 43,
       "name": "MaxCharges"
     },
     {
-      "index": 43,
+      "index": 44,
       "name": "AttackType",
       "converter": {
         "type": "link",
@@ -195,11 +195,11 @@
       }
     },
     {
-      "index": 44,
+      "index": 45,
       "name": "Aspect"
     },
     {
-      "index": 47,
+      "index": 48,
       "name": "Status{GainSelf}",
       "converter": {
         "type": "link",
@@ -207,14 +207,14 @@
       }
     },
     {
-      "index": 48,
+      "index": 49,
       "name": "UnlockLink",
       "converter": {
         "type": "generic"
       }
     },
     {
-      "index": 49,
+      "index": 50,
       "name": "ClassJobCategory",
       "converter": {
         "type": "link",
@@ -222,11 +222,11 @@
       }
     },
     {
-      "index": 52,
+      "index": 53,
       "name": "AffectsPosition"
     },
     {
-      "index": 53,
+      "index": 54,
       "name": "Omen",
       "converter": {
         "type": "link",
@@ -234,15 +234,15 @@
       }
     },
     {
-      "index": 55,
+      "index": 56,
       "name": "IsPvP"
     },
     {
-      "index": 67,
+      "index": 68,
       "name": "IsPlayerAction"
     },
     {
-      "index": 69,
+      "index": 70,
       "name": "ActionProcStatus",
       "converter": {
         "type": "link",
