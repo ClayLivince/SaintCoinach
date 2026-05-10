@@ -238,3 +238,9 @@ $RECYCLE.BIN/
 # JetBrains
 .idea
 SaintCoinach.Cmd/Properties/launchSettings.json
+
+# WinMerge / pre-edit backups (manual conflict-resolution artifacts)
+*.bak
+*.orig
+# Periodic def backup archives
+def.*.zip
