@@ -9,5 +9,6 @@ namespace SaintCoinach.Xiv {
         GLOBAL,
         CHINA,
         KOREA,
+        TRADITIONAL_CHINESE
     }
 }

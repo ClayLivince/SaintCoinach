@@ -208,8 +208,11 @@ namespace SaintCoinach {
                 case "cn":
                     client = ClientType.CHINA;
                     break;
-                case "kr":
+                case "ko":
                     client = ClientType.KOREA;
+                    break;
+                case "tc":
+                    client = ClientType.TRADITIONAL_CHINESE;
                     break;
                 case "":
                 case "global":

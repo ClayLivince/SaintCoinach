@@ -14,6 +14,7 @@ namespace SaintCoinach.Ex {
         [Description("chs")] ChineseSimplified,
         [Description("cht")] ChineseTraditional,
         [Description("ko")] Korean,
+        [Description("tc")] TraditionalChinese,
 
         [Description("?")] Unsupported
     }
@@ -37,6 +38,7 @@ namespace SaintCoinach.Ex {
                 yield return Language.ChineseSimplified;
                 yield return Language.ChineseTraditional;
                 yield return Language.Korean;
+                yield return Language.TraditionalChinese;
             }
         }
 
