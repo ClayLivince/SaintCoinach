@@ -128,6 +128,19 @@ namespace SaintCoinach.Ex {
             return res.Any() ? res.First() : name;
         }
 
+        public Header GetHeader(string name) {
+            const string ExHPathFormat = "exd/{0}.exh";
+
+            //name = FixName(name);
+            if (!_AvailableSheets.Contains(name))
+                throw new KeyNotFoundException($"Unknown sheet '{name}'");
+
+            var exhPath = string.Format(ExHPathFormat, name);
+            var exh = PackCollection.GetFile(exhPath);
+
+            var header = CreateHeader(name, exh);
+            return header;
+        }
         #endregion
 
         #region Factory

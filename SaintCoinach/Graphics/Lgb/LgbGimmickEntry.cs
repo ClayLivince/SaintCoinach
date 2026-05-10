@@ -38,8 +38,8 @@ namespace SaintCoinach.Graphics.Lgb {
             var gimmickFilePath = buffer.ReadString(offset + Header.GimmickFileOffset);
             if (!string.IsNullOrWhiteSpace(gimmickFilePath)) {
                 SaintCoinach.IO.File file;
-                if (packs.TryGetFile(gimmickFilePath, out file))
-                    this.Gimmick = new Sgb.SgbFile(file);
+                //if (packs.TryGetFile(gimmickFilePath, out file))
+                //    this.Gimmick = new Sgb.SgbFile(file);
             }
         }
         #endregion

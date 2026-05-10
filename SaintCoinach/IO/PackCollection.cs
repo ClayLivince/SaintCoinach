@@ -62,13 +62,27 @@ namespace SaintCoinach.IO {
             return false;
         }
 
+        bool PACK_FILE_NOT_FOUND_ERROR_REPORTED = false;
+
         public bool TryGetPack(string path, out Pack pack) {
             pack = null;
 
             if (!PackIdentifier.TryGet(path, out var id))
                 return false;
 
-            pack =_Packs.GetOrAdd(id, i => new Pack(this, DataDirectory, id));
+            try {
+                pack = _Packs.GetOrAdd(id, i => new Pack(this, DataDirectory, id));
+            } catch (FileNotFoundException notFound) {
+                if (!PACK_FILE_NOT_FOUND_ERROR_REPORTED) {
+                    System.Diagnostics.Debug.WriteLine($"Path {path} requested pack {id.Expansion}/{id.Type}-{id.Number} should exist, but not found actually. Maybe we are handling incomplete game installation. This error will be muted.");
+                    System.Diagnostics.Debug.WriteLine(notFound.Message);
+                    Console.WriteLine($"Path {path} requested pack {id.Expansion}/{id.Type}-{id.Number} should exist, but not found actually. Maybe we are handling incomplete game installation. This error will be muted.");
+                    Console.WriteLine(notFound.Message);
+                    PACK_FILE_NOT_FOUND_ERROR_REPORTED = true;
+                }
+                
+                return false;
+            }
             return true;
         }
 

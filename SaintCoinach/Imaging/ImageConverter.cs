@@ -124,8 +124,8 @@ namespace SaintCoinach.Imaging {
             Image image;
             fixed (byte* p = argb) {
                 var ptr = (IntPtr)p;
-                using (var tempImage = new Bitmap(width, height, width * 4, PixelFormat.Format32bppArgb, ptr))
-                    image = new Bitmap(tempImage);
+                using var tempImage = new Bitmap(width, height, width * 4, PixelFormat.Format32bppArgb, ptr);
+                image = new Bitmap(tempImage);
             }
             return image;
         }

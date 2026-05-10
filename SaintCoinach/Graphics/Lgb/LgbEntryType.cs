@@ -25,7 +25,7 @@ namespace SaintCoinach.Graphics.Lgb {
         Aetheryte = 12,
         EnvSpace = 13,
         Gathering = 14,
-        SharedGroup15 = 15,// secondary variable is set to 13
+        SharedGroup15 = 15,// secondary variable is set to 13 // HelperObject
         Treasure = 16,
         Weapon = 39,
         PopRange = 40,
@@ -48,6 +48,12 @@ namespace SaintCoinach.Graphics.Lgb {
         PrefetchRange = 71,
         FateRange = 72,
         SphereCastRange = 75,
-
+        IndoorObject = 76,
+        OutdoorObject = 77,
+        Decal = 83,
+        ColliderLayer7 = 86,
+        ColliderLayer8 = 87,
+        ColliderLayer9 = 88,
+        ColliderLayer10 = 89,
     }
 }
