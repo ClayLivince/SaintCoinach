@@ -47,9 +47,13 @@ namespace Godbert {
         public double MainWindowHeight;
 
         public string SelectedSheetName;
+        public string SelectedIconSet;
         public string FilterSheetTerm;
         public string FilterDataTerm;
+        public string FilterImageTerm;
         public bool ShowOffsets;
         public bool SortByOffsets;
+        public bool ShowIconHr1;
+        public bool ShowIconHQ;
     }
 }

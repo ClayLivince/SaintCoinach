@@ -8,6 +8,11 @@
     <Window.DataContext>
         <vm:MainViewModel />
     </Window.DataContext>
+    <Window.Resources>
+        <Thickness x:Key="StatusBarCommonMargin">10, 0, 10, 0</Thickness>
+        <Thickness x:Key="StartupCommonMargin">30, 10, 30, 10</Thickness>
+        <Thickness x:Key="StartupCommonPadding">30, 10, 30, 10</Thickness>
+    </Window.Resources>
     <DockPanel LastChildFill="True">
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Language">
@@ -35,6 +40,10 @@
                           IsChecked="{Binding Path=IsKorean, Mode=OneWay}"
                           Command="{Binding Path=LanguageCommand}"
                           CommandParameter="{x:Static ex:Language.Korean}"  />
+                <MenuItem Header="TraditionalChinese"
+                          IsChecked="{Binding Path=IsChineseTraditional, Mode=OneWay}"
+                          Command="{Binding Path=LanguageCommand}"
+                          CommandParameter="{x:Static ex:Language.TraditionalChinese}"/>
             </MenuItem>
             <MenuItem Header="Various">
                 <MenuItem Header="New Window"
@@ -50,11 +59,103 @@
                 <MenuItem Header="Sort by Offsets"
                           IsChecked="{Binding Path=SortByOffsets, Mode=OneWay}"
                           Command="{Binding Path=SortByOffsetsCommand}" />
+                <MenuItem Header="High Resolution Icon"
+                          IsChecked="{Binding Path=IsIconHr1, Mode=OneWay}"
+                          Command="{Binding Path=IconResCommand}"/>
+                <MenuItem Header="Item HQ Icon"
+                          IsChecked="{Binding Path=IsIconHQ, Mode=OneWay}"
+                          Command="{Binding Path=IconHQCommand}"/>
             </MenuItem>
         </Menu>
+        <StatusBar DockPanel.Dock="Bottom" Height="30" >
+            <StatusBarItem DockPanel.Dock="Left" Margin="{StaticResource StatusBarCommonMargin}">
+                <TextBlock Text="{Binding ClientType}"></TextBlock>
+            </StatusBarItem>
+            <StatusBarItem DockPanel.Dock="Left" Margin="{StaticResource StatusBarCommonMargin}">
+                <TextBlock Text="{Binding GameVersion}"></TextBlock>
+            </StatusBarItem>
+            <StatusBarItem DockPanel.Dock="Right" Margin="{StaticResource StatusBarCommonMargin}">
+                <ProgressBar Width="100" Height="20" Name="ProcessStatusProgress" Visibility="{Binding ProcessProgressBarVisibility}" Value="{Binding ProcessProgress, Mode=OneWay}" 
+                             IsIndeterminate="{Binding ProcessProgressIndeterminate}"></ProgressBar>
+            </StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Right" Margin="{StaticResource StatusBarCommonMargin}" >
+                <TextBlock Text="{Binding ProcessStatus}" Name="ProcessStatusLabel"></TextBlock>
+            </StatusBarItem>
+
+        </StatusBar>
         <TabControl>
+            <TabItem Header="Startup">
+                <ScrollViewer Width="Auto" Height="Auto">
+                    <DockPanel LastChildFill="True">
+                        <GroupBox Header="Welcome" DockPanel.Dock="Top"  Margin="{StaticResource StartupCommonMargin}" Padding="{StaticResource StartupCommonPadding}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="450"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="100"/>
+                                    <RowDefinition Height="20"/>
+                                    <RowDefinition Height="15"/>
+                                    <RowDefinition Height="15"/>
+                                </Grid.RowDefinitions>
+                                <Image Source="/Godbert.ico" Width="150" Grid.Row="0" Grid.RowSpan="4" Grid.Column="0"></Image>
+                                <TextBlock Grid.Row="0" Grid.Column="1" FontSize="26" FontWeight="Bold" VerticalAlignment="Bottom">Godbert</TextBlock>
+                                <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Bottom">A Final Fantasy XIV Datamining tool powered by SaintCoinach.</TextBlock>
+                                <TextBlock Grid.Row="2" Grid.Column="1" VerticalAlignment="Bottom">Happy Goldsmithing!</TextBlock>
+                                <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Bottom" Text="{Binding BuildVersion}"></TextBlock>
+                            </Grid>
+                            
+
+                        </GroupBox>
+                        <GroupBox Header="Client Properties" DockPanel.Dock="Top" Margin="{StaticResource StartupCommonMargin}" Padding="{StaticResource StartupCommonPadding}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Label Grid.Row="0" Grid.Column="0" >Game Path</Label>
+                                <Label Grid.Row="1" Grid.Column="0" >Client Type</Label>
+                                <Label Grid.Row="2" Grid.Column="0" >Game Version</Label>
+                                <Label Grid.Row="3" Grid.Column="0" >Definition Version</Label>
+
+                                <Label Content="{Binding GamePath}" Grid.Row="0" Grid.Column="1" Width="Auto" VerticalAlignment="Center" Margin="5 0 0 0"/>
+                                <Label Content="{Binding ClientType}" Grid.Row="1" Grid.Column="1" Width="Auto" VerticalAlignment="Center" Margin="5 0 0 0"/>
+                                <Label Content="{Binding GameVersion}" Grid.Row="2" Grid.Column="1" Width="Auto" VerticalAlignment="Center" Margin="5 0 0 0"/>
+                                <Label Content="{Binding DefinitionVersion}" Grid.Row="3" Grid.Column="1" Width="Auto" VerticalAlignment="Center" Margin="5 0 0 0"/>
+
+                                <Button Grid.Row="0" Grid.Column="3" Padding="5 0" Command="{Binding Path=GameLocationCommand}">Change Game Path</Button>
+                                <Button Grid.Row="1" Grid.Column="3" Padding="5 0">Clear Configuration</Button>
+
+                            </Grid>
+                        </GroupBox>
+                        <Expander Header="Log Console" Margin="{StaticResource StartupCommonMargin}">
+                            <GroupBox Header="Logs" DockPanel.Dock="Top" Margin="0 20" Padding="{StaticResource StartupCommonPadding}">
+                                <DockPanel LastChildFill="True">
+                                    <DockPanel DockPanel.Dock="Bottom" Height="Auto" Margin="0 5 0 5">
+                                        <Button DockPanel.Dock="Right" HorizontalAlignment="Right" Height="Auto" Width="100">Save to File</Button>
+                                    </DockPanel>
+                                    <TextBox Name="ConsoleOutputTextBox" Background="#FFFFFFFF" TextWrapping="Wrap" Text="{Binding LogText}" TextChanged="ConsoleOutputTextBox_TextChanged" Height="200" VerticalScrollBarVisibility="Auto" IsReadOnly="True"/>
+                                </DockPanel>
+                            </GroupBox>
+                        </Expander>
+
+
+                    </DockPanel>
+                </ScrollViewer>
+            </TabItem>
             <TabItem Header="Data" DataContext="{Binding Path=Data}">
                 <views:DataView />
+            </TabItem>
+            <TabItem Header="UI" DataContext="{Binding Path=Image}">
+                <views:ImageView />
             </TabItem>
             <TabItem Header="3D">
                 <TabControl>
@@ -79,5 +180,6 @@
                 </TabControl>
             </TabItem>
         </TabControl>
+
     </DockPanel>
 </Window>
