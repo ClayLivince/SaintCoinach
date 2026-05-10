@@ -1,0 +1,46 @@
+{
+  "sheet": "Tutorial",
+  "defaultColumn": "Objective",
+  "definitions": [
+    {
+      "index": 5,
+      "name": "Exp"
+    },
+    {
+      "index": 6,
+      "name": "Gil"
+    },
+    {
+      "index": 7,
+      "name": "Reward{Tank}",
+      "converter": {
+        "type": "link",
+        "target": "Item"
+      }
+    },
+    {
+      "index": 8,
+      "name": "Reward{Melee}",
+      "converter": {
+        "type": "link",
+        "target": "Item"
+      }
+    },
+    {
+      "index": 9,
+      "name": "Reward{Ranged}",
+      "converter": {
+        "type": "link",
+        "target": "Item"
+      }
+    },
+    {
+      "index": 11,
+      "name": "Objective",
+      "converter": {
+        "type": "link",
+        "target": "InstanceContentTextData"
+      }
+    }
+  ]
+}

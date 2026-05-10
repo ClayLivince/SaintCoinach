@@ -1,0 +1,145 @@
+{
+  "sheet": "MountCustomize",
+  "definitions": [
+    {
+      "index": 1,
+      "name": "HyurMidlanderMaleScale"
+    },
+    {
+      "index": 2,
+      "name": "HyurMidlanderFemaleScale"
+    },
+    {
+      "index": 3,
+      "name": "HyurHighlanderMaleScale"
+    },
+    {
+      "index": 4,
+      "name": "HyurHighlanderFemaleScale"
+    },
+    {
+      "index": 5,
+      "name": "ElezenMaleScale"
+    },
+    {
+      "index": 6,
+      "name": "ElezenFemaleScale"
+    },
+    {
+      "index": 7,
+      "name": "LalaMaleScale"
+    },
+    {
+      "index": 8,
+      "name": "LalaFemaleScale"
+    },
+    {
+      "index": 9,
+      "name": "MiqoMaleScale"
+    },
+    {
+      "index": 10,
+      "name": "MiqoFemaleScale"
+    },
+    {
+      "index": 11,
+      "name": "RoeMaleScale"
+    },
+    {
+      "index": 12,
+      "name": "RoeFemaleScale"
+    },
+    {
+      "index": 13,
+      "name": "AuRaMaleScale"
+    },
+    {
+      "index": 14,
+      "name": "AuRaFemaleScale"
+    },
+    {
+      "index": 15,
+      "name": "HrothgarMaleScale"
+    },
+    {
+      "index": 16,
+      "name": "HrothgarFemaleScale"
+    },
+    {
+      "index": 17,
+      "name": "VieraMaleScale"
+    },
+    {
+      "index": 18,
+      "name": "VieraFemaleScale"
+    },
+    {
+      "index": 21,
+      "name": "HyurMidlanderMaleCameraHeight"
+    },
+    {
+      "index": 22,
+      "name": "HyurMidlanderFemaleCameraHeight"
+    },
+    {
+      "index": 23,
+      "name": "HyurHighlanderMaleCameraHeight"
+    },
+    {
+      "index": 24,
+      "name": "HyurHighlanderFemaleCameraHeight"
+    },
+    {
+      "index": 25,
+      "name": "ElezenMaleCameraHeight"
+    },
+    {
+      "index": 26,
+      "name": "ElezenFemaleCameraHeight"
+    },
+    {
+      "index": 27,
+      "name": "LalaMaleCameraHeight"
+    },
+    {
+      "index": 28,
+      "name": "LalaFemaleCameraHeight"
+    },
+    {
+      "index": 29,
+      "name": "MiqoMaleCameraHeight"
+    },
+    {
+      "index": 30,
+      "name": "MiqoFemaleCameraHeight"
+    },
+    {
+      "index": 31,
+      "name": "RoeMaleCameraHeight"
+    },
+    {
+      "index": 32,
+      "name": "RoeFemaleCameraHeight"
+    },
+    {
+      "index": 33,
+      "name": "AuRaMaleCameraHeight"
+    },
+    {
+      "index": 34,
+      "name": "AuRaFemaleCameraHeight"
+    },
+    {
+      "index": 35,
+      "name": "HrothgarMaleCameraHeight"
+    },
+    {
+      "index": 36,
+      "name": "VieraMaleCameraHeight"
+    },
+    {
+      "index": 37,
+      "name": "VieraFemaleCameraHeight"
+    }
+  ]
+}

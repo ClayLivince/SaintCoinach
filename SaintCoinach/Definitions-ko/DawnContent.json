@@ -1,0 +1,21 @@
+{
+  "sheet": "DawnContent",
+  "defaultColumn": "Content",
+  "definitions": [
+    {
+      "name": "Content",
+      "converter": {
+        "type": "link",
+        "target": "ContentFinderCondition"
+      }
+    },
+    {
+      "index": 6,
+      "name": "Exp{BelowExMaxLvl}"
+    },
+    {
+      "index": 7,
+      "name": "Exp{AboveExMaxLvl}"
+    }
+  ]
+}

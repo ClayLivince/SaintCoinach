@@ -1,0 +1,16 @@
+{
+  "sheet": "MJIGardenscaping",
+  "definitions": [
+    {
+      "name": "Level"
+    },
+    {
+      "index": 5,
+      "name": "Item",
+      "converter": {
+        "type": "link",
+        "target": "Item"
+      }
+    }
+  ]
+}
