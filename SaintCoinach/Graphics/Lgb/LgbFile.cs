@@ -12,12 +12,12 @@ namespace SaintCoinach.Graphics.Lgb {
         public struct HeaderData {
             public uint Magic1;     // LGB1
             public uint FileSize;
-            public uint Unknown1;
+            public uint Unknown1;   // SectionCount
             public uint Magic2;     // LGP1
-            public uint Unknown2;
-            public uint Unknown3;
-            public uint Unknown4;
-            public uint Unknown5;
+            public uint Unknown2;   // SectionSize
+            public uint Unknown3;   // ID
+            public uint Unknown4;   // SectionName
+            public uint Unknown5;   // Offset To Layer
             public int GroupCount;
         }
         #endregion

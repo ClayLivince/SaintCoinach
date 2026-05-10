@@ -11,7 +11,11 @@ namespace SaintCoinach.Graphics.Lgb {
         [StructLayout(LayoutKind.Sequential)]
         public struct HeaderData {
             public LgbEntryType Type;
-            public uint UnknownId;
+            public uint UnknownId;             // This ID is Level
+            public int NameOffset;
+            public Vector3 Translation;
+            public Vector3 Rotation;
+            public Vector3 Scale;
             // 24 bytes of unknowns
         }
         #endregion

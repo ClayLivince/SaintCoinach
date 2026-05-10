@@ -50,7 +50,7 @@ namespace SaintCoinach.Xiv {
         /// </summary>
         /// <returns>An array of item and value pairs of the current materia group.</returns>
         private ItemValue[] BuildItems() {
-            const int Count = 10;
+            const int Count = 16;
 
             var items = new List<ItemValue>();
 

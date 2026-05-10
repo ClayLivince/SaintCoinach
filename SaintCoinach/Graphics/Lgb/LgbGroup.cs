@@ -11,21 +11,21 @@ namespace SaintCoinach.Graphics.Lgb {
         #region Struct
         [StructLayout(LayoutKind.Sequential)]
         public struct HeaderData {
-            public uint Unknown1;
-            public int GroupNameOffset;
-            public int EntriesOffset;
-            public int EntryCount;
-            public uint Unknown2;
-            public uint Unknown3;
-            public uint FestivalId;
-            public uint Unknown5;
+            public uint Unknown1;          // 0x00  Key
+            public int GroupNameOffset;    // 0x04
+            public int EntriesOffset;      // 0x08
+            public int EntryCount;         // 0x0C
+            public uint Unknown2;          // 0x10
+            public uint Unknown3;          // 0x14  OffsetFilter
+            public uint FestivalId;        // 0x18
+            public uint Unknown5;          // 0x1C
             // Just a guess -
             // This number corresponds to the last digits of Map.Id.  In
             // territories with rotated subdivisions, it can be used to select
             // the appropriate map for coordinate calculation.
             // Possibly 3-4 bytes to match the first three columns in the Map
             // exd.
-            public uint MapIndex;
+            public uint MapIndex;          // 0x20
             public uint Unknown7;
             public uint Unknown8;
             public uint Unknown9;
@@ -47,8 +47,8 @@ namespace SaintCoinach.Graphics.Lgb {
             this.Header = buffer.ToStructure<HeaderData>(offset);
             this.Name = buffer.ReadString(offset + Header.GroupNameOffset);
 
-            uint[] Unknown = new uint[100];
-            System.Buffer.BlockCopy(buffer, offset + System.Runtime.InteropServices.Marshal.SizeOf<HeaderData>(), Unknown, 0, 400);
+            //uint[] Unknown = new uint[100];
+            //System.Buffer.BlockCopy(buffer, offset + System.Runtime.InteropServices.Marshal.SizeOf<HeaderData>(), Unknown, 0, 400);
 
 
             var entriesOffset = offset + Header.EntriesOffset;
@@ -80,7 +80,6 @@ namespace SaintCoinach.Graphics.Lgb {
                             break;
                         case LgbEntryType.EventRange:
                         case LgbEntryType.FateRange:
-                            Debug.WriteLine($"{Parent.File.Path} {type} at 0x{entryOffset:X} in {Name}: Can't read type.");
                             Entries[i] = new LgbFateRangeEntry(Parent.File.Pack.Collection, buffer, entryOffset);
                             break;
                         default:

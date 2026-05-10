@@ -49,8 +49,8 @@ namespace SaintCoinach.Graphics.Lgb {
                             var path = ((SaintCoinach.Text.XivString)row2.GetRaw(0)).ToString();
                             if (!string.IsNullOrEmpty(path)) {
                                 SaintCoinach.IO.File file;
-                                if (packs.TryGetFile(path, out file))
-                                    this.Gimmick = new Sgb.SgbFile(file);
+                                //if (packs.TryGetFile(path, out file))
+                                 //   this.Gimmick = new Sgb.SgbFile(file);
                             }
                             break;
                         }
