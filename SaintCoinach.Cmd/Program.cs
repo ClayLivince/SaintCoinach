@@ -33,6 +33,9 @@ namespace SaintCoinach.Cmd {
                 return;
             }
 
+            // Pull the latest shared definitions before the realm reads them (public, no auth).
+            DefinitionUpdater.UpdateOnStartup();
+
             var realm = new ARealmReversed(dataPath, @"SaintCoinach.History.zip", Ex.Language.English, @"app_data.sqlite");
             realm.Packs.GetPack(new IO.PackIdentifier("exd", IO.PackIdentifier.DefaultExpansion, 0)).KeepInMemory = true;
 
