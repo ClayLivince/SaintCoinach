@@ -94,8 +94,8 @@ namespace Godbert.Controls {
                     return 1;
 
 
-                var vx = ColumnFactory.ForceRaw || RawDataGrid.ColumnSetToRaw[Column.Index] ? rx.GetRaw(Column.Index) : rx[Column.Index];
-                var vy = ColumnFactory.ForceRaw || RawDataGrid.ColumnSetToRaw[Column.Index] ? ry.GetRaw(Column.Index) : ry[Column.Index];
+                var vx = SafeRead(rx);
+                var vy = SafeRead(ry);
 
                 if (vx == vy)
                     return 0;
@@ -108,6 +108,19 @@ namespace Godbert.Controls {
                 var sy = vy.ToString();
 
                 return _NaturalComparer.Compare(sx, sy);
+            }
+
+            // Reading a typed value can throw InvalidCastException when the definition no
+            // longer matches the raw data. Fall back to the raw value so sorting a drifted
+            // column never crashes the app.
+            private object SafeRead(IRow row) {
+                if (ColumnFactory.ForceRaw || RawDataGrid.ColumnSetToRaw[Column.Index])
+                    return row.GetRaw(Column.Index);
+                try {
+                    return row[Column.Index];
+                } catch {
+                    return row.GetRaw(Column.Index);
+                }
             }
 
             #endregion

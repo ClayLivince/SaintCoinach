@@ -1,0 +1,327 @@
+<UserControl x:Class="Godbert.Views.DefinitionView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:Godbert.ViewModels"
+             xmlns:def="clr-namespace:Godbert.ViewModels.Definition"
+             xmlns:ctl="clr-namespace:Godbert.Controls"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+
+        <!-- Sheet list item: name + drift badge -->
+        <DataTemplate x:Key="SheetListItemTemplate">
+            <Grid Margin="2,1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="{Binding SheetName}" />
+                <Border Grid.Column="1" Background="#FFD0D0" CornerRadius="3" Padding="4,0" Margin="4,0,0,0"
+                        ToolTip="Definition fails to cast against real data — needs fixing"
+                        Visibility="{Binding HasCastFailure, Converter={StaticResource BoolToVis}}">
+                    <TextBlock Text="{Binding Badge}" FontWeight="Bold" Foreground="#900000" />
+                </Border>
+                <Border Grid.Column="1" Background="#FFE0A0" CornerRadius="3" Padding="4,0" Margin="4,0,0,0"
+                        ToolTip="Column-count drift vs. raw EXH data"
+                        Visibility="{Binding ShowDriftBadge, Converter={StaticResource BoolToVis}}">
+                    <TextBlock Text="{Binding Badge}" FontWeight="Bold" Foreground="#604000" />
+                </Border>
+                <Border Grid.Column="1" Background="#D0D0D0" CornerRadius="3" Padding="4,0" Margin="4,0,0,0"
+                        ToolTip="No definition file for this sheet"
+                        Visibility="{Binding MissingDefinition, Converter={StaticResource BoolToVis}}">
+                    <TextBlock Text="?" FontWeight="Bold" Foreground="#404040" />
+                </Border>
+            </Grid>
+        </DataTemplate>
+
+        <!-- Converter editors (chosen by VM type) -->
+        <DataTemplate DataType="{x:Type def:LinkConverterEditorViewModel}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Target sheet:" VerticalAlignment="Center" Margin="0,0,4,0" />
+                <ComboBox Width="220" IsEditable="True" Text="{Binding TargetSheet, UpdateSourceTrigger=PropertyChanged}"
+                          ItemsSource="{Binding Sheet.Realm.GameData.AvailableSheets}" />
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type def:MultiRefConverterEditorViewModel}">
+            <StackPanel>
+                <TextBlock Text="Multi-reference targets" FontWeight="Bold" Margin="0,0,0,4" />
+                <ItemsControl ItemsSource="{Binding Targets}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Margin="0,1">
+                                <ComboBox Width="200" IsEditable="True"
+                                          Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                          ItemsSource="{Binding DataContext.Sheet.Realm.GameData.AvailableSheets,
+                                                          RelativeSource={RelativeSource AncestorType=ItemsControl}}" />
+                                <Button Content="Remove" Margin="4,0,0,0" Padding="6,0"
+                                        Click="MultiRef_Remove_Click"
+                                        Tag="{Binding}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <Button Content="Add target" HorizontalAlignment="Left" Margin="0,4,0,0" Padding="6,1"
+                        Click="MultiRef_Add_Click" />
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type def:ColorConverterEditorViewModel}">
+            <CheckBox Content="Includes alpha channel" IsChecked="{Binding IncludesAlpha}" />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type def:SimpleConverterEditorViewModel}">
+            <TextBlock>
+                <Run Text="Converter:" />
+                <Run Text="{Binding TypeKey, Mode=OneWay}" FontWeight="Bold" />
+                <Run Text="(no parameters)" Foreground="Gray" />
+            </TextBlock>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type def:ComplexLinkConverterEditorViewModel}">
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Top" Foreground="Gray" Margin="0,0,0,4"
+                           Text="complexlink — read-only here, edit JSON file directly" />
+                <TextBox Text="{Binding Json, Mode=OneWay}" IsReadOnly="True"
+                         FontFamily="Consolas" FontSize="11" AcceptsReturn="True"
+                         VerticalScrollBarVisibility="Auto" MaxHeight="200" />
+            </DockPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type def:RawJsonConverterEditorViewModel}">
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Top" Foreground="Gray" Text="(read-only fallback)" Margin="0,0,0,4" />
+                <TextBox Text="{Binding Json, Mode=OneWay}" IsReadOnly="True"
+                         FontFamily="Consolas" FontSize="11" AcceptsReturn="True"
+                         VerticalScrollBarVisibility="Auto" MaxHeight="200" />
+            </DockPanel>
+        </DataTemplate>
+
+        <!-- TreeView templates: PositionedNode (root) and DefinitionNode (nested) -->
+        <HierarchicalDataTemplate DataType="{x:Type def:DefinitionNodeViewModel}" ItemsSource="{Binding Children}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding TypeKey}" Foreground="DarkSlateBlue" FontSize="10"
+                           VerticalAlignment="Center" Margin="0,0,4,0" />
+                <TextBlock Text="{Binding DisplayName}" />
+            </StackPanel>
+        </HierarchicalDataTemplate>
+
+        <HierarchicalDataTemplate DataType="{x:Type def:SingleNodeViewModel}" ItemsSource="{Binding Children}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="single" Foreground="DarkSlateBlue" FontSize="10"
+                           VerticalAlignment="Center" Margin="0,0,4,0" />
+                <TextBlock Text="{Binding DisplayName}" />
+                <TextBlock Text="{Binding ConverterSummary}" Foreground="Gray" Margin="6,0,0,0" />
+            </StackPanel>
+        </HierarchicalDataTemplate>
+
+        <HierarchicalDataTemplate DataType="{x:Type def:GroupNodeViewModel}" ItemsSource="{Binding Children}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="group" Foreground="DarkSlateBlue" FontSize="10"
+                           VerticalAlignment="Center" Margin="0,0,4,0" />
+                <TextBlock Text="{Binding DisplayName}" />
+            </StackPanel>
+        </HierarchicalDataTemplate>
+
+        <HierarchicalDataTemplate DataType="{x:Type def:RepeatNodeViewModel}" ItemsSource="{Binding Children}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="repeat" Foreground="DarkSlateBlue" FontSize="10"
+                           VerticalAlignment="Center" Margin="0,0,4,0" />
+                <TextBlock Text="{Binding DisplayName}" />
+            </StackPanel>
+        </HierarchicalDataTemplate>
+
+        <HierarchicalDataTemplate DataType="{x:Type def:PositionedNodeViewModel}" ItemsSource="{Binding Node.Children}">
+            <StackPanel Orientation="Horizontal">
+                <Border Background="#FFE8F0FF" CornerRadius="2" Padding="3,0" Margin="0,0,4,0">
+                    <TextBlock Text="{Binding Index}" FontWeight="Bold" />
+                </Border>
+                <ContentPresenter Content="{Binding Node}" />
+            </StackPanel>
+        </HierarchicalDataTemplate>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="260" />
+            <ColumnDefinition Width="5" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="5" />
+            <ColumnDefinition Width="380" />
+        </Grid.ColumnDefinitions>
+
+        <!-- LEFT: sheet list -->
+        <DockPanel Grid.Column="0" Margin="4">
+            <StackPanel DockPanel.Dock="Top" Margin="0,0,0,4">
+                <TextBox Text="{Binding FilterTerm, UpdateSourceTrigger=PropertyChanged}" />
+                <CheckBox Content="Only drifted / missing" IsChecked="{Binding ShowOnlyDrifted}" Margin="0,4,0,0" />
+            </StackPanel>
+            <Button DockPanel.Dock="Bottom" Content="Rescan drift" Command="{Binding RescanCommand}" Margin="0,4,0,0" />
+            <Button DockPanel.Dock="Bottom" Content="Cast Test (all sheets)" Command="{Binding CastTestAllCommand}" Margin="0,4,0,0"
+                    ToolTip="Read one row of every defined sheet and flag columns whose definition no longer casts (red badge)." />
+            <Button DockPanel.Dock="Bottom" Content="Save All Modified" Command="{Binding SaveAllCommand}" Margin="0,4,0,0" />
+            <ListBox ItemsSource="{Binding FilteredSheets}"
+                     ItemTemplate="{StaticResource SheetListItemTemplate}"
+                     SelectedValuePath="SheetName"
+                     SelectedValue="{Binding SelectedSheetName, Mode=TwoWay}" />
+        </DockPanel>
+
+        <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+
+        <!-- MIDDLE: editor -->
+        <DockPanel Grid.Column="2" Margin="4" DataContext="{Binding CurrentEditor}">
+            <DockPanel.Style>
+                <Style TargetType="DockPanel">
+                    <Setter Property="Visibility" Value="Visible" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding}" Value="{x:Null}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DockPanel.Style>
+
+            <!-- Header strip -->
+            <Border DockPanel.Dock="Top" Background="#FFF0F0F8" Padding="6" Margin="0,0,0,4">
+                <StackPanel>
+                    <TextBlock>
+                        <Run Text="{Binding Title, Mode=OneWay}" FontWeight="Bold" FontSize="14" />
+                        <Run Text=" — raw columns:" />
+                        <Run Text="{Binding RawColumnCount, Mode=OneWay}" />
+                    </TextBlock>
+                    <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                        <TextBlock Text="DefaultColumn:" VerticalAlignment="Center" Margin="0,0,4,0" />
+                        <TextBox Text="{Binding DefaultColumn, UpdateSourceTrigger=PropertyChanged}" Width="180" />
+                        <CheckBox Content="IsGenericReferenceTarget" IsChecked="{Binding IsGenericReferenceTarget}"
+                                  VerticalAlignment="Center" Margin="12,0,0,0" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Toolbar -->
+            <ToolBar DockPanel.Dock="Top">
+                <Button Content="Save"           Command="{Binding SaveCommand}" />
+                <Button Content="Revert"         Command="{Binding RevertCommand}" />
+                <Button Content="Submit to server" Command="{Binding SubmitToServerCommand}"
+                        Visibility="{Binding SubmitVisibility}" />
+                <Separator />
+                <Button Content="Add column"     Command="{Binding AddColumnCommand}" />
+                <Button Content="Insert + Shift" Command="{Binding InsertAndShiftCommand}" />
+                <Button Content="Delete"         Command="{Binding DeleteCommand}" />
+                <Separator />
+                <Button Content="↑" Command="{Binding MoveUpCommand}"   ToolTip="Move up" />
+                <Button Content="↓" Command="{Binding MoveDownCommand}" ToolTip="Move down" />
+                <Separator />
+                <TextBlock Text="Convert:" VerticalAlignment="Center" Margin="4,0" />
+                <Button Content="→ Single" Command="{Binding ConvertToSingleCommand}" />
+                <Button Content="→ Repeat" Command="{Binding ConvertToRepeatCommand}" />
+                <Button Content="→ Group"  Command="{Binding ConvertToGroupCommand}" />
+                <Separator />
+                <Button Content="Refresh preview" Command="{Binding RefreshPreviewCommand}" />
+            </ToolBar>
+
+            <!-- Selected-node editor (bottom region) -->
+            <Border DockPanel.Dock="Bottom" Background="#FFF8F8F0" Padding="6" Margin="0,4,0,0">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="Visibility" Value="Visible" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedItem}" Value="{x:Null}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <StackPanel DataContext="{Binding SelectedItem}">
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                        <TextBlock Text="Index:" VerticalAlignment="Center" Margin="0,0,4,0" />
+                        <TextBox Width="60" Text="{Binding Index, UpdateSourceTrigger=LostFocus}" />
+                    </StackPanel>
+                    <ContentControl Content="{Binding Node}">
+                        <ContentControl.Resources>
+                            <DataTemplate DataType="{x:Type def:SingleNodeViewModel}">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                        <TextBlock Text="Name:" VerticalAlignment="Center" Margin="0,0,4,0" />
+                                        <TextBox Width="220" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                        <TextBlock Text="Converter:" VerticalAlignment="Center" Margin="0,0,4,0" />
+                                        <ComboBox Width="120" SelectedItem="{Binding Converter.TypeKey, Mode=OneWay}"
+                                                  SelectionChanged="ConverterType_Changed" Tag="{Binding}">
+                                            <sys:String>(none)</sys:String>
+                                            <sys:String>link</sys:String>
+                                            <sys:String>multiref</sys:String>
+                                            <sys:String>color</sys:String>
+                                            <sys:String>icon</sys:String>
+                                            <sys:String>generic</sys:String>
+                                            <sys:String>tomestone</sys:String>
+                                        </ComboBox>
+                                    </StackPanel>
+                                    <ContentControl Content="{Binding Converter}" />
+                                </StackPanel>
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type def:RepeatNodeViewModel}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Repeat count:" VerticalAlignment="Center" Margin="0,0,4,0" />
+                                    <TextBox Width="60" Text="{Binding RepeatCount, UpdateSourceTrigger=LostFocus}" />
+                                </StackPanel>
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type def:GroupNodeViewModel}">
+                                <TextBlock Text="Group — children are members of this group." Foreground="Gray" />
+                            </DataTemplate>
+                        </ContentControl.Resources>
+                    </ContentControl>
+                </StackPanel>
+            </Border>
+
+            <!-- Tree (fills rest) -->
+            <TreeView ItemsSource="{Binding Definitions}"
+                      SelectedItemChanged="DefinitionTree_SelectedItemChanged" />
+        </DockPanel>
+
+        <GridSplitter Grid.Column="3" Width="5" HorizontalAlignment="Stretch" />
+
+        <!-- RIGHT: preview -->
+        <DockPanel Grid.Column="4" Margin="4" DataContext="{Binding CurrentEditor}">
+            <DockPanel.Style>
+                <Style TargetType="DockPanel">
+                    <Setter Property="Visibility" Value="Visible" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding}" Value="{x:Null}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DockPanel.Style>
+
+            <TextBlock DockPanel.Dock="Top" Text="Preview (edited definition applied)" FontWeight="Bold" Margin="0,0,0,4" />
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="5" />
+                    <RowDefinition Height="220" />
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <ctl:DefinitionPreviewGrid Preview="{Binding Preview}" />
+                    <Border Background="#C0FFFFFF"
+                            Visibility="{Binding Preview.IsLoading, Converter={StaticResource BoolToVis}}">
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBlock Text="Loading preview…" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" />
+                            <ProgressBar IsIndeterminate="True" Width="160" Height="14" Margin="0,8,0,0" />
+                        </StackPanel>
+                    </Border>
+                </Grid>
+                <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch" />
+                <DockPanel Grid.Row="2">
+                    <TextBlock DockPanel.Dock="Top" Margin="0,0,0,2">
+                        <Run Text="Raw bytes for column" />
+                        <Run Text="{Binding Preview.SelectedColumnIndex, Mode=OneWay, FallbackValue='(click a header)'}" FontWeight="Bold" />
+                    </TextBlock>
+                    <ctl:DefinitionRawInspectorGrid Preview="{Binding Preview}" />
+                </DockPanel>
+            </Grid>
+        </DockPanel>
+    </Grid>
+</UserControl>

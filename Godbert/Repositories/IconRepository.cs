@@ -1,5 +1,7 @@
 ﻿using Godbert.Models;
 using Godbert.ViewModels;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SaintCoinach;
 using SaintCoinach.Ex;
 using SaintCoinach.Imaging;
@@ -25,12 +27,23 @@ namespace Godbert.Repositories {
 
         public IconRepository(MainViewModel parent) : base(parent) {
             _iconSetsByPatch[DefaultSetName] = new();
+            LoadRemarks();
         }
 
         private Dictionary<string, Dictionary<string, IEnumerable<ScannedIcon>>> _iconSetsByPatch = new();
         private Dictionary<string, IEnumerable<ScannedIcon>> _iconsByImageSetName => _iconSetsByPatch[DefaultSetName];
 
+        // nickname (label) → set id, derived from remarks so the set list is searchable by label.
         private Dictionary<string, string> _iconSetNickNames = new();
+
+        // Shared icon resources (synced via the definition server).
+        private readonly DefinitionSyncClient _sync = new();
+        private Dictionary<string, (string label, string note)> _remarks = new(StringComparer.OrdinalIgnoreCase);
+        private Dictionary<string, string> _syncedVersionBaseline = new();
+
+        private string ClientTypeName => Enum.GetName<ClientType>(Parent.ClientType);
+        private static string RemarksPath => DefinitionSyncClient.LocalPath("IconRemarks.json");
+        private string IconVersionsPath => DefinitionSyncClient.LocalPath($"IconVersions/{ClientTypeName}.json");
 
         public override IEnumerable<string> GetAvailableEntries() {
             return GetAvailableEntries(DefaultSetName);
@@ -93,11 +106,13 @@ namespace Godbert.Repositories {
             Parent.Image.SelectedPatch = DefaultSetName;
             Parent.Image.Refresh();
             PatchDatabase.Save();
+            AutoSubmitIconVersions();
         }
 
         internal void ScanIcons(BackgroundWorker worker) {
             int min = 0;
             int max = 999999;
+            MergeSyncedIconVersionsFromDisk(); // pull-before-scan: consume the authoritative map first
             _iconSetsByPatch.Clear();
             _iconSetsByPatch[DefaultSetName] = new();
 
@@ -196,5 +211,113 @@ namespace Godbert.Repositories {
         public string GetCurrentLanguageVariant() {
             return "/" + Parent.Realm.GameData.ActiveLanguageCode;
         }
+
+        #region Shared resources (remarks + icon versions)
+
+        /// <summary>
+        /// Called (on the UI thread) by the launch sync when a shared icon file was downloaded.
+        /// Remarks are reloaded immediately (separate from scan state). Downloaded icon-version maps
+        /// are NOT merged live — the icon scan reads/writes the same PatchDatabase on a worker thread,
+        /// so they are picked up at the start of the next scan instead (the history converges over
+        /// launches regardless, since the server merges earliest-wins).
+        /// </summary>
+        public void OnSharedFilesUpdated(IEnumerable<string> relPaths) {
+            foreach (var p in relPaths) {
+                if (string.Equals(p, "IconRemarks.json", StringComparison.OrdinalIgnoreCase))
+                    ReloadRemarks();
+            }
+        }
+
+        public (string label, string note) GetRemark(string setId) =>
+            _remarks.TryGetValue(setId ?? string.Empty, out var r) ? r : (string.Empty, string.Empty);
+
+        public void ReloadRemarks() => LoadRemarks();
+
+        private void LoadRemarks() {
+            _remarks = new Dictionary<string, (string, string)>(StringComparer.OrdinalIgnoreCase);
+            _iconSetNickNames = new Dictionary<string, string>();
+            try {
+                if (!System.IO.File.Exists(RemarksPath)) return;
+                var obj = JObject.Parse(System.IO.File.ReadAllText(RemarksPath));
+                foreach (var p in obj.Properties()) {
+                    var label = (string)p.Value["label"] ?? string.Empty;
+                    var note = (string)p.Value["note"] ?? string.Empty;
+                    _remarks[p.Name] = (label, note);
+                    if (!string.IsNullOrWhiteSpace(label))
+                        _iconSetNickNames[label] = p.Name;
+                }
+            } catch (Exception ex) {
+                Parent.LogToView($"Failed to read icon remarks: {ex.Message}");
+            }
+        }
+
+        /// <summary>Update a remark locally, persist the synced file, and return the full remarks JSON to submit.</summary>
+        public string SetRemarkLocalAndSerialize(string setId, string label, string note) {
+            _remarks[setId] = (label ?? string.Empty, note ?? string.Empty);
+            _iconSetNickNames = new Dictionary<string, string>();
+            foreach (var kv in _remarks)
+                if (!string.IsNullOrWhiteSpace(kv.Value.label))
+                    _iconSetNickNames[kv.Value.label] = kv.Key;
+
+            var json = SerializeRemarks();
+            try {
+                System.IO.File.WriteAllText(RemarksPath, json, new UTF8Encoding(false));
+            } catch (Exception ex) {
+                Parent.LogToView($"Failed to save icon remarks: {ex.Message}");
+            }
+            return json;
+        }
+
+        // Mirrors the server's canonical form (sorted keys, label/note when non-empty, indented).
+        private string SerializeRemarks() {
+            var outObj = new JObject();
+            foreach (var kv in _remarks.OrderBy(k => k.Key, StringComparer.Ordinal)) {
+                var entry = new JObject();
+                if (!string.IsNullOrEmpty(kv.Value.label)) entry["label"] = kv.Value.label;
+                if (!string.IsNullOrEmpty(kv.Value.note)) entry["note"] = kv.Value.note;
+                outObj[kv.Key] = entry;
+            }
+            return JsonConvert.SerializeObject(outObj, Formatting.Indented);
+        }
+
+        private void MergeSyncedIconVersionsFromDisk() {
+            try {
+                if (!System.IO.File.Exists(IconVersionsPath)) { _syncedVersionBaseline = new(); return; }
+                var map = JsonConvert.DeserializeObject<Dictionary<string, string>>(System.IO.File.ReadAllText(IconVersionsPath))
+                          ?? new Dictionary<string, string>();
+                PatchDatabase.MergeSharedIconVersions(ClientTypeName, map);
+                _syncedVersionBaseline = new Dictionary<string, string>(map);
+            } catch (Exception ex) {
+                Parent.LogToView($"Failed to read shared icon versions: {ex.Message}");
+                _syncedVersionBaseline = new();
+            }
+        }
+
+        /// <summary>After a scan, push any icon versions the server doesn't yet have (delta vs. the synced baseline).</summary>
+        private async void AutoSubmitIconVersions() {
+            if (!_sync.IsConfigured) return;
+            if (string.IsNullOrWhiteSpace(Settings.Default.DefinitionServerUser)) return; // read-only user
+
+            try {
+                var ct = ClientTypeName;
+                var current = PatchDatabase.GetIconVersionMap(ct);
+                var delta = new Dictionary<string, string>();
+                foreach (var kv in current)
+                    if (!_syncedVersionBaseline.TryGetValue(kv.Key, out var b) ||
+                        !string.Equals(b, kv.Value, StringComparison.Ordinal))
+                        delta[kv.Key] = kv.Value;
+
+                if (delta.Count == 0) return;
+
+                var res = await _sync.SubmitAsync("iconversion", ct, JsonConvert.SerializeObject(delta));
+                Parent.LogToView(res.Ok
+                    ? $"Shared {delta.Count} icon version(s) for {ct}."
+                    : $"Icon version share failed: {res.Error}");
+            } catch (Exception ex) {
+                Parent.LogToView($"Icon version share error: {ex.Message}");
+            }
+        }
+
+        #endregion
     }
 }

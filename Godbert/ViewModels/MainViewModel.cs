@@ -31,6 +31,8 @@ namespace Godbert.ViewModels {
         public DataViewModel Data { get; private set; }
 
         public ImageViewModel Image { get; private set; }
+
+        public DefinitionViewModel Definition { get; private set; }
         
 
         public bool IsEnglish { get { return Realm?.GameData.ActiveLanguage == SaintCoinach.Ex.Language.English; } }
@@ -47,7 +49,7 @@ namespace Godbert.ViewModels {
         public bool SortByOffsets { get { return Settings.Default.SortByOffsets;} }
         public bool ShowOffsets { get { return Settings.Default.ShowOffsets; } }
 
-        public string BuildVersion { get { return "bCL-251231"; } }
+        public string BuildVersion { get { return "bCL-260529"; } }
 
         public ClientType ClientType { get; private set; }
 
@@ -137,6 +139,9 @@ namespace Godbert.ViewModels {
             Demihuman = new DemihumanViewModel(this);
             Data = new DataViewModel(Realm, this);
             Image = new ImageViewModel(Realm, this);
+            Definition = new DefinitionViewModel(this);
+            Definition.DriftRepository.Initialize();
+            Definition.CheckForUpdatesOnLaunch();
 
             OnPropertyChanged(() => Realm);
             OnPropertyChanged(() => EngineHelper);
@@ -147,6 +152,7 @@ namespace Godbert.ViewModels {
             OnPropertyChanged(() => Demihuman);
             OnPropertyChanged(() => Data);
             OnPropertyChanged(() => Image);
+            OnPropertyChanged(() => Definition);
 
             OnPropertyChanged(() => GamePath);
             OnPropertyChanged(() => GameVersion);

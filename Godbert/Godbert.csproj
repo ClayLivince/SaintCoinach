@@ -27,6 +27,16 @@
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
+  <!-- DefinitionServer is a standalone ASP.NET Core app with its own repo; keep its sources
+       out of the WPF client build (the SDK's recursive globs would otherwise pull them in). -->
+  <ItemGroup>
+    <Compile Remove="DefinitionServer\**" />
+    <Content Remove="DefinitionServer\**" />
+    <EmbeddedResource Remove="DefinitionServer\**" />
+    <None Remove="DefinitionServer\**" />
+    <Page Remove="DefinitionServer\**" />
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />

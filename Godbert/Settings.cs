@@ -55,5 +55,11 @@ namespace Godbert {
         public bool SortByOffsets;
         public bool ShowIconHr1;
         public bool ShowIconHQ;
+
+        // Definition-sharing server (blank by default → all sharing UI is hidden/disabled).
+        // The PIN is a write-gate token shared within a trusted circle, not real security.
+        public string DefinitionServerUrl;
+        public string DefinitionServerUser;
+        public string DefinitionServerPin;
     }
 }

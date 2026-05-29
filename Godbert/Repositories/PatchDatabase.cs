@@ -66,5 +66,39 @@ namespace Godbert.Repositories {
             return cur;
 
         }
+
+        /// <summary>Snapshot of the icon-version map for a client type (for sharing/submission).</summary>
+        public static Dictionary<string, string> GetIconVersionMap(string clientType) {
+            if (patchDictByClientType.TryGetValue(clientType, out var byType) &&
+                byType.TryGetValue("icon", out var map))
+                return new Dictionary<string, string>(map);
+            return new Dictionary<string, string>();
+        }
+
+        /// <summary>
+        /// Merge a shared icon-version map (from the server) into the local store, keeping the
+        /// EARLIEST version per icon (ordinal min works for the sortable yyyy.mm.dd.bbbb.bbbb format).
+        /// Returns the number of entries that became earlier/new locally.
+        /// </summary>
+        public static int MergeSharedIconVersions(string clientType, IDictionary<string, string> incoming) {
+            if (!patchDictByClientType.TryGetValue(clientType, out var byType)) {
+                byType = new Dictionary<string, Dictionary<string, string>>();
+                patchDictByClientType[clientType] = byType;
+            }
+            if (!byType.TryGetValue("icon", out var map)) {
+                map = new Dictionary<string, string>();
+                byType["icon"] = map;
+            }
+
+            var changed = 0;
+            foreach (var kv in incoming) {
+                if (string.IsNullOrEmpty(kv.Value)) continue;
+                if (!map.TryGetValue(kv.Key, out var cur) || string.CompareOrdinal(kv.Value, cur) < 0) {
+                    map[kv.Key] = kv.Value;
+                    changed++;
+                }
+            }
+            return changed;
+        }
     }
 }

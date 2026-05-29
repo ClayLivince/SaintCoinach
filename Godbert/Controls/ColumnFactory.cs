@@ -41,7 +41,62 @@ namespace Godbert.Controls {
             target.Header = header;
             target.IsReadOnly = true;
             target.CanUserSort = true;
+            target.CellStyle = BuildErrorCellStyle(column.Index);
             return target;
+        }
+
+        private static readonly System.Windows.Media.Brush CastErrorBrush =
+            new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0xFF, 0xC8, 0xC8));
+
+        static ColumnFactory() {
+            CastErrorBrush.Freeze();
+        }
+
+        /// <summary>
+        /// CellStyle that paints a cell red when its typed read throws (stale definition vs.
+        /// real data). Mirrors the raw-mode logic so cells shown raw aren't flagged.
+        /// </summary>
+        private static System.Windows.Style BuildErrorCellStyle(int columnIndex) {
+            var style = new System.Windows.Style(typeof(DataGridCell));
+            style.Setters.Add(new System.Windows.Setter(DataGridCell.BackgroundProperty, new Binding {
+                Mode = BindingMode.OneWay,
+                Converter = new ErrorBrushConverter(),
+                ConverterParameter = columnIndex
+            }));
+
+            // Assigning an explicit cell style replaces the theme default (which carries the
+            // selection-highlight trigger), so re-add it — otherwise selected rows render with
+            // our background instead of the system highlight (the "white selection" bug).
+            var selected = new System.Windows.Trigger {
+                Property = DataGridCell.IsSelectedProperty,
+                Value = true
+            };
+            selected.Setters.Add(new System.Windows.Setter(DataGridCell.BackgroundProperty, System.Windows.SystemColors.HighlightBrush));
+            selected.Setters.Add(new System.Windows.Setter(DataGridCell.ForegroundProperty, System.Windows.SystemColors.HighlightTextBrush));
+            selected.Setters.Add(new System.Windows.Setter(DataGridCell.BorderBrushProperty, System.Windows.SystemColors.HighlightBrush));
+            style.Triggers.Add(selected);
+
+            return style;
+        }
+
+        private class ErrorBrushConverter : System.Windows.Data.IValueConverter {
+            public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
+                var row = value as IRow;
+                if (row == null) return System.Windows.Media.Brushes.Transparent;
+                var i = System.Convert.ToInt32(parameter);
+                if (ForceRaw || (RawDataGrid.ColumnSetToRaw != null && i < RawDataGrid.ColumnSetToRaw.Length && RawDataGrid.ColumnSetToRaw[i]))
+                    return System.Windows.Media.Brushes.Transparent;
+                try {
+                    var _ = row[i];
+                    return System.Windows.Media.Brushes.Transparent;
+                } catch {
+                    return CastErrorBrush;
+                }
+            }
+
+            public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
+                throw new NotImplementedException();
+            }
         }
 
         private static string BuildHeader(RelationalColumn column) {
@@ -92,7 +147,13 @@ namespace Godbert.Controls {
                 if (ForceRaw || RawDataGrid.ColumnSetToRaw[i])
                     return row.GetRaw(i);
 
-                return row[i] ?? row.GetRaw(i);
+                try {
+                    return row[i] ?? row.GetRaw(i);
+                } catch {
+                    // Stale definition vs. real data: show the raw value instead of crashing.
+                    // The cell is flagged red via ErrorBrushConverter.
+                    return row.GetRaw(i);
+                }
             }
 
             public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {

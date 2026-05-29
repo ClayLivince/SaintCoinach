@@ -3,6 +3,7 @@ using Godbert.Models;
 using Godbert.Repositories;
 using SaintCoinach.Ex.Relational;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -20,9 +21,10 @@ namespace Godbert.ViewModels {
         private string _SelectedIconSet;
         private string _SelectedPatch;
         private ScannedIcon _SelectedIcon;
-        private IList<ScannedIcon> _SelectedIcons;
+        private IList _SelectedIcons;
         private DelegateCommand<string> _ExportIconCommand;
         private DelegateCommand<string> _ExportIconSetCommand;
+        private DelegateCommand<string> _AddRemarkCommand;
 
         public IconRepository IconRepository { get; private set; }
         public IEnumerable<ScannedIcon> Icons => IconRepository.GetIcons(_SelectedIconSet, _SelectedPatch);
@@ -32,11 +34,17 @@ namespace Godbert.ViewModels {
 
         public ICommand ExportIconCommand { get { return _ExportIconCommand ?? (_ExportIconCommand = new DelegateCommand<string>(OnExportImage)); } }
         public ICommand ExportIconSetCommand { get { return _ExportIconSetCommand ?? (_ExportIconSetCommand = new DelegateCommand<string>(OnExportIconSet)); } }
+        public ICommand AddRemarkCommand { get { return _AddRemarkCommand ?? (_AddRemarkCommand = new DelegateCommand<string>(OnAddRemark)); } }
         
         public SaintCoinach.ARealmReversed Realm { get; private set; }
         public MainViewModel Parent { get; private set; }
 
-        public IEnumerable<string> FilteredIconSets { get { return IconRepository.GetFilteredEntries(_FilterImageTerm, _SelectedPatch); } }
+        public IEnumerable<IconSetItem> FilteredIconSets {
+            get {
+                return IconRepository.GetFilteredEntries(_FilterImageTerm, _SelectedPatch)
+                    .Select(id => new IconSetItem(id, IconRepository.GetRemark(id).label));
+            }
+        }
         public IEnumerable<string> Patches => IconRepository.GetPatches();
         public string SelectedIconSet {
             get { return _SelectedIconSet; }
@@ -67,7 +75,7 @@ namespace Godbert.ViewModels {
             }
         }
 
-        public IList<ScannedIcon> SelectedIcons {
+        public IList SelectedIcons {
             get => _SelectedIcons;
             set {
                 _SelectedIcons = value;
@@ -121,11 +129,9 @@ namespace Godbert.ViewModels {
         private void OnExportImage(string res) {
             if (SelectedIcon == null)
                 return;
-            if (SelectedIcons != null) {
-                if (_SelectedIcons.Count > 0) {
-                    ExportIcons(_SelectedIcons, res);
-                    return;
-                }
+            if (_SelectedIcons != null && _SelectedIcons.Count > 1) {
+                ExportIcons(_SelectedIcons.Cast<ScannedIcon>(), res);
+                return;
             }
 
             var dlg = new Microsoft.Win32.SaveFileDialog {
@@ -180,6 +186,52 @@ namespace Godbert.ViewModels {
                 return original.Substring(idx + 1);
             return original;
         }
+        #endregion
+
+        #region Remarks
+
+        private async void OnAddRemark(string _) {
+            var setId = SelectedIconSet;
+            if (string.IsNullOrWhiteSpace(setId)) {
+                System.Windows.MessageBox.Show("Select an icon set first.", "Add remark",
+                    System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+                return;
+            }
+
+            var (label, note) = IconRepository.GetRemark(setId);
+            var dlg = new Godbert.Views.RemarkDialog(setId, label, note) {
+                Owner = System.Windows.Application.Current?.MainWindow
+            };
+            if (dlg.ShowDialog() != true) return;
+
+            var json = IconRepository.SetRemarkLocalAndSerialize(setId, dlg.RemarkLabel, dlg.RemarkNote);
+            OnPropertyChanged(() => FilteredIconSets); // refresh nickname search
+
+            var sync = new DefinitionSyncClient();
+            if (!sync.IsConfigured) {
+                Parent.LogToView($"Remark saved locally for set {setId} (no server configured).");
+                return;
+            }
+
+            var res = await sync.SubmitAsync("remark", "IconRemarks", json);
+            if (res.Ok && res.IsPending)
+                System.Windows.MessageBox.Show($"Remark for set {setId} submitted for review.",
+                    "Submitted for review", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+            else if (res.Ok)
+                System.Windows.MessageBox.Show($"Remark for set {setId} accepted (server v{res.NewVersion}).",
+                    "Accepted", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+            else
+                System.Windows.MessageBox.Show($"Remark submit failed: {res.Error}",
+                    "Submit failed", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+        }
+
+        /// <summary>Apply downloaded shared icon files (remarks / versions) this session.</summary>
+        public void OnSharedFilesUpdated(IEnumerable<string> relPaths) {
+            IconRepository.OnSharedFilesUpdated(relPaths);
+            OnPropertyChanged(() => FilteredIconSets);
+            Refresh();
+        }
+
         #endregion
 
     }

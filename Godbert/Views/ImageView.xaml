@@ -33,6 +33,18 @@
                     </Style>
                 </MenuItem.Style>
             </MenuItem>
+            <Separator />
+            <MenuItem Header="Add remark…" Command="{Binding AddRemarkCommand}" CommandParameter="">
+                <MenuItem.Style>
+                    <Style TargetType="MenuItem">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=SelectedIconSet}" Value="{x:Null}">
+                                <Setter Property="IsEnabled" Value="False" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </MenuItem.Style>
+            </MenuItem>
         </ContextMenu>
         <ContextMenu x:Key="IconContextMenu">
             <MenuItem Header="Export" Command="{Binding ExportIconCommand}" CommandParameter="">
@@ -59,6 +71,10 @@
             </MenuItem>
         </ContextMenu>
         <ctrl:MinDimensionConverter x:Key="MinConverter"/>
+
+        <DataTemplate x:Key="IconSetItemTemplate">
+            <TextBlock Text="{Binding Display}" TextTrimming="CharacterEllipsis" />
+        </DataTemplate>
     </UserControl.Resources>
     
     <Grid>
@@ -79,7 +95,9 @@
                       SelectionChanged="PatchSelectionChanged"/>
             <ListBox x:Name="IconSets"
                 ItemsSource="{Binding FilteredIconSets}"
-                        SelectedItem="{Binding SelectedIconSet, Mode=TwoWay}"
+                        SelectedValuePath="Id"
+                        SelectedValue="{Binding SelectedIconSet, Mode=TwoWay}"
+                        ItemTemplate="{StaticResource IconSetItemTemplate}"
                         HorizontalAlignment="Stretch"
                         ContextMenu="{StaticResource IconSetContextMenu}"
                      SelectionChanged="IconSetSelectionChanged"/>

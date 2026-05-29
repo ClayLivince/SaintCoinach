@@ -80,5 +80,10 @@ namespace Godbert {
         private void ConsoleOutputTextBox_TextChanged(object sender, TextChangedEventArgs e) {
             ConsoleOutputTextBox.ScrollToEnd();
         }
+
+        private void DefinitionServerSettings_Click(object sender, RoutedEventArgs e) {
+            var dlg = new Views.DefinitionServerSettingsWindow { Owner = this };
+            dlg.ShowDialog();
+        }
     }
 }

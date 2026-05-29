@@ -65,6 +65,8 @@
                 <MenuItem Header="Item HQ Icon"
                           IsChecked="{Binding Path=IsIconHQ, Mode=OneWay}"
                           Command="{Binding Path=IconHQCommand}"/>
+                <Separator />
+                <MenuItem Header="Definition Server…" Click="DefinitionServerSettings_Click" />
             </MenuItem>
         </Menu>
         <StatusBar DockPanel.Dock="Bottom" Height="30" >
@@ -156,6 +158,9 @@
             </TabItem>
             <TabItem Header="UI" DataContext="{Binding Path=Image}">
                 <views:ImageView />
+            </TabItem>
+            <TabItem Header="Definition" DataContext="{Binding Path=Definition}">
+                <views:DefinitionView />
             </TabItem>
             <TabItem Header="3D">
                 <TabControl>

@@ -321,6 +321,60 @@ namespace SaintCoinach {
         }
 
         /// <summary>
+        ///     Persist a single <see cref="SheetDefinition" /> back to its on-disk JSON file
+        ///     under the working-directory <c>Definitions</c> folder (the same location
+        ///     <see cref="ReadDefinition" /> loads from). Used by the Godbert Definition tab
+        ///     for in-app editing.
+        /// </summary>
+        public void SaveSheetDefinition(SheetDefinition sheetDef) {
+            if (sheetDef == null) throw new ArgumentNullException(nameof(sheetDef));
+            if (string.IsNullOrWhiteSpace(sheetDef.Name)) throw new ArgumentException("SheetDefinition.Name is required.", nameof(sheetDef));
+
+            var sheetDefPath = Path.Combine("Definitions", sheetDef.Name + ".json");
+            File.WriteAllText(sheetDefPath, SheetToJson(sheetDef), Encoding.UTF8);
+        }
+
+        /// <summary>
+        ///     Re-read a single sheet's definition from its on-disk JSON and apply it to the
+        ///     in-memory <see cref="GameData" /> definition so the change takes effect this
+        ///     session. Mirrors the in-app editor's save path (mutates the existing
+        ///     <see cref="SheetDefinition" /> instance in place so references stay valid).
+        /// </summary>
+        /// <param name="sheetName">Sheet whose <c>Definitions/&lt;sheet&gt;.json</c> should be reloaded.</param>
+        /// <param name="wasNew">Set to <c>true</c> when the sheet had no prior definition; the caller
+        ///     should then call <c>GameData.Definition.Compile()</c> once so the new sheet is mapped.</param>
+        /// <returns><c>true</c> if a definition file existed and was applied.</returns>
+        public bool ReloadSheetDefinition(string sheetName, out bool wasNew) {
+            wasNew = false;
+            if (string.IsNullOrWhiteSpace(sheetName)) return false;
+
+            var path = Path.Combine("Definitions", sheetName + ".json");
+            if (!File.Exists(path)) return false;
+
+            var json = File.ReadAllText(path, Encoding.UTF8);
+            var obj = JsonConvert.DeserializeObject<Newtonsoft.Json.Linq.JObject>(json);
+            var parsed = SheetDefinition.FromJson(obj);
+
+            if (GameData.Definition.TryGetSheet(sheetName, out var live)) {
+                live.DataDefinitions.Clear();
+                foreach (var d in parsed.DataDefinitions)
+                    live.DataDefinitions.Add(d);
+                live.DefaultColumn = parsed.DefaultColumn;
+                live.IsGenericReferenceTarget = parsed.IsGenericReferenceTarget;
+                foreach (var d in live.DataDefinitions)
+                    d.ResolveReferences(live);
+                live.Compile();
+            } else {
+                foreach (var d in parsed.DataDefinitions)
+                    d.ResolveReferences(parsed);
+                parsed.Compile();
+                GameData.Definition.SheetDefinitions.Add(parsed);
+                wasNew = true;
+            }
+            return true;
+        }
+
+        /// <summary>
         ///     Store a <see cref="UpdateReport" /> in a <see cref="ZipFile" />.
         /// </summary>
         /// <param name="zip"><see cref="ZipFile" /> to write to.</param>

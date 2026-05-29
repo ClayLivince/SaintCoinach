@@ -244,3 +244,9 @@ SaintCoinach.Cmd/Properties/launchSettings.json
 *.orig
 # Periodic def backup archives
 def.*.zip
+
+# Definition sharing server lives in its OWN git repo, not embedded in this one.
+Godbert/DefinitionServer/
+
+# Packaged definitions archive (build/distribution artifact)
+SaintCoinach/Definitions.zip
