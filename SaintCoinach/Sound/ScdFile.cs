@@ -111,6 +111,8 @@ namespace SaintCoinach.Sound {
                     return new ScdOggEntry(this, header, dataOffset);
                 case ScdCodec.MSADPCM:
                     return new ScdAdpcmEntry(this, header, chunksOffset, dataOffset);
+                case ScdCodec.HCA:
+                    return new ScdHcaEntry(this, header, dataOffset);
                 default:
                     throw new NotSupportedException();
             }
