@@ -22,6 +22,7 @@ namespace SaintCoinach.Text {
         Switch          = 0x09,
         IfEquals        = 0x0C,
         Unknown0A       = 0x0A,     // TODO
+        Unknowd0D       = 0x0D,     // Korean strange padding for Mob Name
         LineBreak       = 0x10,
         // Wait            = 0x11, // Not present anywhere in game data up to 2015.04.17.0001.0000
 

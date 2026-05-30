@@ -17,6 +17,31 @@
   <ItemGroup>
     <ProjectReference Include="..\DotSquish\DotSquish.csproj" />
   </ItemGroup>
+  <!--
+    DereTore HCA decoder. The shipped DLLs are MSIL (AnyCPU) so a single arch
+    folder works for both x64 and x86 builds, but the user prefers to keep the
+    arch-split layout (lib\x64 / lib\x86) for clarity. Pick x86 only when the
+    consuming project explicitly builds x86; default to x64 for AnyCPU and
+    every other case so a default `dotnet build` still resolves the references.
+  -->
+  <PropertyGroup>
+    <DereToreLibArch Condition="'$(Platform)' == 'x86'">x86</DereToreLibArch>
+    <DereToreLibArch Condition="'$(DereToreLibArch)' == ''">x64</DereToreLibArch>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DereTore.Common">
+      <HintPath>lib\$(DereToreLibArch)\DereTore.Common.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+    <Reference Include="DereTore.Exchange.Audio.HCA">
+      <HintPath>lib\$(DereToreLibArch)\DereTore.Exchange.Audio.HCA.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+    <Reference Include="DereTore.Interop.OS">
+      <HintPath>lib\$(DereToreLibArch)\DereTore.Interop.OS.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Definitions\*.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
