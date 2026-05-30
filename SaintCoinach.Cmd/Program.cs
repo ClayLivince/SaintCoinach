@@ -19,6 +19,7 @@ namespace SaintCoinach.Cmd {
     class Program {
         private static void Main(string[] args) {
             var dataPath = Properties.Settings.Default.DataPath;
+            bool UpdateDisabled = true;
 
             if (args.Length > 0) {
                 dataPath = args[0];
@@ -67,7 +68,7 @@ namespace SaintCoinach.Cmd {
             Console.WriteLine($"Detected client type {clientType}, using {Enum.GetName(targetLanguage)}.");
             realm.GameData.ActiveLanguage = targetLanguage;
             
-            if (!realm.IsCurrentVersion) {
+            if (!realm.IsCurrentVersion && !UpdateDisabled) {
                 Console.Write("Update is available, perform update (Y/n)? ");
                 var updateQuery = Console.ReadLine();
                 if (string.IsNullOrEmpty(updateQuery) || string.Equals("y", updateQuery, StringComparison.OrdinalIgnoreCase)) {
